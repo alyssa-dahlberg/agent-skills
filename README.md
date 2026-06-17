@@ -32,11 +32,13 @@ npx skills add alyssa-dahlberg/agent-skills -a claude-code
 ## Skills
 
 - **[tooling-feedback](skills/tooling-feedback/SKILL.md)** — capture an in-the-moment field
-  report when an agent, skill, or other tool falls short, written as a tracked file under
-  `.agent-feedback/` so it travels with the PR and is reviewable in the diff. Recording only.
+  report when an **agent, skill, or tool** falls short (not just tool usage), written as a
+  tracked file under `.agent-feedback/` so it travels with the PR and is reviewable in the diff.
+  Recording only.
 - **[tooling-feedback-triage](skills/tooling-feedback-triage/SKILL.md)** — the other half: find
-  the accumulated reports, validate each against the tool it names, route it to a resolution
-  (deferring the actual fix to the repo's conventions or the user), and clean up when done.
+  the accumulated reports, validate each against the agent, skill, or tool it names, route it to
+  a resolution (deferring the actual fix to the repo's conventions or the user), and clean up
+  when done.
 
 ## Layout
 
