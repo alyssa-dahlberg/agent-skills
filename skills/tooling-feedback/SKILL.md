@@ -1,6 +1,6 @@
 ---
 name: tooling-feedback
-description: Capture an in-the-moment field report when an agent, skill, or tool falls short during a real session — a missed catch, awkward steps, a wrong trigger, or just leaving you wishing it did more. Covers all three: the agents you delegate to, the skills you invoke, and the tools you call — not just tool usage. Writes a small tracked file under .agent-feedback/ so the report travels with the PR and is reviewable in the diff. Trigger whenever any of them underperforms mid-task (don't break flow to do it), or whenever the user explicitly asks to log feedback — phrases like "tooling feedback", "agent feedback", "skill feedback", "log feedback", or "file a field report".
+description: Capture an in-the-moment field report when an agent, skill, or tool falls short during a real session — a missed catch, awkward steps, a wrong trigger, or just leaving you wishing it did more. Covers all three — the agents you delegate to, the skills you invoke, and the tools you call — not just tool usage. Writes a small tracked file under .agent-feedback/ so the report travels with the PR and is reviewable in the diff. Trigger whenever any of them underperforms mid-task (don't break flow to do it), or whenever the user explicitly asks to log feedback — phrases like "tooling feedback", "agent feedback", "skill feedback", "log feedback", or "file a field report".
 ---
 
 # Tooling feedback
