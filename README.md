@@ -58,6 +58,12 @@ copy.
   the accumulated reports, validate each against the agent, skill, or tool it names, route it to
   a resolution (deferring the actual fix to the repo's conventions or the user), and clean up
   when done.
+- **[review-lenses](skills/review-lenses/README.md)** — a composable, extensible code/design
+  review system. One orchestrator resolves a plain-English request into **(lens × target)** jobs
+  and dispatches read-only reviewers; a **lens** is a small markdown file describing one concern,
+  so adding a concern is dropping a file. A neutral engine you layer your own opinionated review
+  on top of — see the [skill README](skills/review-lenses/README.md) for the model, the example
+  lenses, and how to write good ones.
 
 ## Layout
 
@@ -68,8 +74,13 @@ Each skill is a directory under `skills/` containing a `SKILL.md` with YAML fron
 skills/
 ├── tooling-feedback/
 │   └── SKILL.md
-└── tooling-feedback-triage/
-    └── SKILL.md
+├── tooling-feedback-triage/
+│   └── SKILL.md
+└── review-lenses/
+    ├── SKILL.md
+    ├── README.md          # human-facing guide
+    ├── reference/         # lens format + reviewer contract
+    └── examples/          # starter lenses to copy
 ```
 
 ## License
