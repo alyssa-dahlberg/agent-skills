@@ -1,0 +1,11 @@
+feat: add retry logic
+
+This commit adds retry logic to the worker. It's not just a simple retry — it's a
+comprehensive resilience layer that fundamentally changes how we handle transient failures.
+
+The changes include: modifying OrderWriter.cs to add the retry loop, adding RetryPolicy.cs
+which defines the interface, updating appsettings.json with the new configuration values,
+and adding tests in RetryPolicyTests.cs.
+
+Retries happen three times with exponential backoff (200ms, 400ms, 800ms) with 20% jitter.
+This was chosen deliberately because it balances responsiveness with load on the database.

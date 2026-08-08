@@ -1,0 +1,23 @@
+[
+  {"query": "ok so i just finished writing the README for our payments module (apps/payments/README.md) — it's about 400 words covering setup, the webhook flow and how to run the integration tests locally. can you look over it before i open the PR? feels like it might be waffly in places", "should_trigger": true},
+  {"query": "our docs/architecture.md has grown to like 3000 words and honestly nobody on the team reads it any more. can you go through it and tell me what should move out or get cut", "should_trigger": true},
+  {"query": "the retry policy is written out in full in our README, in docs/architecture.md AND in the xmldoc on IRetryPolicy. pretty sure they've drifted. what should i do about that", "should_trigger": true},
+  {"query": "before i push this — the commit message is 12 lines and i think most of it is just restating the diff. worth trimming?", "should_trigger": true},
+  {"query": "i dictated a bunch of notes into designs/search-rework.md while walking and it is a complete mess. lots of half sentences and me changing my mind mid-thought. can you clean it up but dont lose any of the actual decisions", "should_trigger": true},
+  {"query": "this PR touches 6 markdown files under docs/. can you check the writing quality before i request review from the team", "should_trigger": true},
+  {"query": "have a look at the doc comments on our IOrderStore interface — i think they mention SqlOrderStore by name which feels wrong for an interface", "should_trigger": true},
+  {"query": "our setup guide says the request timeout is 30 seconds but i'm pretty sure appsettings has it at 60. can you check the docs against the actual config and flag anything else that's drifted", "should_trigger": true},
+  {"query": "i've written up the caching design in docs/caching.md, ~800 words. does it read alright? aiming for something a new dev could follow", "should_trigger": true},
+  {"query": "the headings in our docs are all like 'The one thing you need to know about rate limiting' and it reads like a listicle. can you go through docs/ and sort that out", "should_trigger": true},
+
+  {"query": "can you review this PR for bugs? it's a change to the order reconciliation job in src/Jobs/Reconcile.cs, mostly around how we handle partial failures", "should_trigger": false},
+  {"query": "i need api reference docs generated from our OpenAPI spec at api/openapi.yaml — is there a tool that'll do that or do i need to write something", "should_trigger": false},
+  {"query": "our landing page copy is a bit flat. can you make the hero section punchier? currently says 'Image hosting for creators' and i want something with more energy", "should_trigger": false},
+  {"query": "i've been working on a short story for a competition, about 2000 words. would you read it and tell me if the ending lands?", "should_trigger": false},
+  {"query": "there are a bunch of broken relative links in docs/ after we moved things around last week. can you find them all and fix the paths", "should_trigger": false},
+  {"query": "we want the README translated into Japanese for the JP launch. is machine translation good enough here or do we need a human", "should_trigger": false},
+  {"query": "can you summarise this 40 page RFC for me? i just need to know whether it affects our auth flow", "should_trigger": false},
+  {"query": "OrderService has grown to 900 lines and does way too much. can you suggest how to break it up — i'm thinking extract the pricing bit at least", "should_trigger": false},
+  {"query": "docs site build is failing on markdownlint MD013 line length across about 20 files. what's the least annoying way to deal with this, do we just disable the rule", "should_trigger": false},
+  {"query": "we're launching the new editor next week and i need a blog post announcing it. around 600 words, should get people excited about the collaborative editing bit", "should_trigger": false}
+]

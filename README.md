@@ -58,6 +58,16 @@ copy.
   the accumulated reports, validate each against the agent, skill, or tool it names, route it to
   a resolution (deferring the actual fix to the repo's conventions or the user), and clean up
   when done.
+- **[technical-editor](skills/technical-editor/SKILL.md)** — an editor for everything
+  human-readable in a repo: docs, READMEs, comments, doc comments, commit messages, and names.
+  Two jobs, in order: put each fact in one place at the right level of detail and link to it,
+  then cut the prose to plain, direct language. Checks documented values against the code and
+  the config that overrides them, judges artifacts by how long they're meant to last (a working
+  note and a reference page get different rules), and asks whether a document has grown into
+  two. Reviews what's written rather than auditing for what's missing. Returns suggestions to
+  accept or reject rather than editing in place, and expects to be run repeatedly. Standalone —
+  it assumes nothing about what else you run. `DESIGN.md` records the evidence behind each
+  decision, and `evals/` holds fixtures with answer keys for anyone changing it.
 - **[review-lenses](skills/review-lenses/README.md)** — a composable, extensible code/design
   review system. One orchestrator resolves a plain-English request into **(lens × target)** jobs
   and dispatches read-only reviewers; a **lens** is a small markdown file describing one concern,
@@ -67,21 +77,10 @@ copy.
 
 ## Layout
 
-Each skill is a directory under `skills/` containing a `SKILL.md` with YAML frontmatter
-(`name`, `description`) plus any supporting files:
-
-```
-skills/
-├── tooling-feedback/
-│   └── SKILL.md
-├── tooling-feedback-triage/
-│   └── SKILL.md
-└── review-lenses/
-    ├── SKILL.md
-    ├── README.md          # human-facing guide
-    ├── reference/         # lens format + reviewer contract
-    └── examples/          # starter lenses to copy
-```
+Each skill is a directory under `skills/`, containing a `SKILL.md` with YAML frontmatter
+(`name`, `description`). Larger skills add `reference/` for material loaded on demand,
+`examples/` for worked cases, and a `README.md` where there's a human-facing guide distinct from
+the agent instructions.
 
 ## License
 
