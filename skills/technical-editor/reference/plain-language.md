@@ -2,10 +2,13 @@
 
 How to weigh what you find, and what not to cut.
 
-This is deliberately not a list of patterns to scan for. Current models recognise the usual tells
-without being shown a catalogue, and arriving with one turns a reading into a search: you find what
-is listed and walk past what isn't. What's hard is judging what a pattern costs *this* reader in
-*this* sentence, which is what this file is about.
+This is not the general catalogue of tells; that sits outside the runtime path, in
+[evals/detection-spec.md](../evals/detection-spec.md). Current models recognise the usual tells
+without being shown a list, and arriving with one turns a reading into a search: you find what is
+listed and walk past what isn't. What's hard is judging what a pattern costs *this* reader in *this*
+sentence, and that is what most of this file is about. The patterns it does name have their own
+sections below, and each is there because judgement alone tends to miss it, or to talk itself out of
+the fix.
 
 ## How to weigh what you find
 
@@ -186,7 +189,7 @@ Three fixes, cheapest first:
 "Single decode base generation" is the same defect in miniature, and it's why that sentence has two
 problems at once rather than one.
 
-### Words that can be more than one part of speech
+### Nouns that read as verbs
 
 "Reads", "holds", "processes", "records", "runs", "builds", "returns" are all both nouns and verbs,
 and technical vocabulary is unusually full of them. A sentence that opens on one invites the wrong

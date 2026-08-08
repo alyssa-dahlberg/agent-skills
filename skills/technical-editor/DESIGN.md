@@ -82,8 +82,16 @@ what they find, and it is why `plain-language.md` teaches how to weigh patterns 
 An intermediate version tried to enforce this by instruction: keep the enumerations in
 `plain-language.md` and tell pass 2 not to read them. An outside review pointed out that leaked twice
 over, since the file was handed to pass 2 anyway and `SKILL.md` named the patterns itself. The fix at
-the time was to move them to a separate file; the fix now is that they aren't in the runtime path at
-all.
+the time was to move them to a separate file; the fix now is that the general catalogue isn't in the
+runtime path at all.
+
+**A few named patterns came back later, and that is not a reversal.** `plain-language.md` names em
+dashes, misleading first reads, paragraphs that are really lists, and offhand phrasing kept as voice.
+Each was added for a reason recorded below, and the reasons share a shape: these are the cases where
+an editor working from judgement alone walks past the defect, or talks itself out of the fix. A
+catalogue narrows an independent reading; a handful of named exceptions to that reading doesn't. If
+this list grows much beyond a handful, that argument has stopped being true and the catalogue is
+coming back by instalments.
 
 **An argument that does not work:** an earlier note here claimed pass 3's yield would measure the
 catalogue's value over time. It can't. Runs are stateless and nobody aggregates outcomes across them,
@@ -402,12 +410,12 @@ claiming density, the out-of-scope rewrite, and preferring deletions to substitu
 ## Known weaknesses
 
 - **The pattern enumerations are close to inert.** Tested directly (see the anchoring experiment).
-  Cutting them changed nothing measurable. They now live in `evals/detection-spec.md`, outside
-  the default load path, so they cost nothing unless a catalogue sweep runs. That makes keeping them
-  cheap but removes the forcing function to decide. An outside review pointed out that the
+  Cutting them changed nothing measurable. They now live in `evals/detection-spec.md`, outside the
+  skill's own instructions, so they cost nothing except when a run consults another model family and
+  pastes them in. That consultation is what now justifies keeping them; if it stops being how anyone
+  uses the file, delete them rather than deferring again. An outside review pointed out that the
   "pass 3 measures its own worth" argument cannot work, because runs are stateless and nobody
-  aggregates outcomes across them. If they are still unjustified next time someone touches this,
-  delete them rather than deferring again.
+  aggregates outcomes across them.
 - **Waffle correlates with the writing task more than the model, but the effect is smaller than it
   first looked.** Given a tight fact brief, the model produced 849 words with zero style words, zero
   hedges, and no inflated verbs. Given a vague philosophical brief and a word target, it produced 936

@@ -3,8 +3,10 @@
 Test inputs for the skill, with known answer keys. Synthetic unless noted, written for this purpose and
 not taken from anyone's repository. `backfill-design-excerpt.md` is the exception and says so.
 
-Nothing here is loaded when the skill runs. It's for whoever is changing the skill and wants to know
-whether they made it worse. See [../DESIGN.md](../DESIGN.md) for what previous runs found.
+These fixtures are for whoever is changing the skill and wants to know whether they made it worse,
+and nothing here loads when the skill runs. The exception is [detection-spec.md](detection-spec.md),
+which a run reads when it consults a model from another family. See [../DESIGN.md](../DESIGN.md) for
+what previous runs found.
 
 [detection-spec.md](detection-spec.md) lists what the skill is expected to catch, and maps each
 pattern to the fixture exercising it. Start there when adding a fixture; the table says what isn't
@@ -135,7 +137,7 @@ language is part of what's being tested.
 | `docs/search.md` "Relevance tuning" | An enduring doc points at `wip/relevance-rework.md` **as the reference for how ranking works**. The plan is at step 5 of 5 and will be deleted; the doc is then left with nothing. Not a status note; it's load-bearing. |
 | `docs/search.md` "Synonyms" | States that expansion is built from query logs and "scored", citing `designs/query-log-expansion.md`. That design is explicitly **not built**. An enduring doc is describing something that doesn't exist. |
 | `wip/relevance-rework.md` | Steps 1–4 are done and deployed, and this plan holds the **only** copy of durable facts: per-field normalisation, title floor 0.3, weights 0.6/0.4, and the reason (short titles outranked long relevant bodies). Needs promoting to `docs/search.md` before the plan is deleted. |
-| `src/SearchIndex.cs` | Temporary information wearing permanent clothes, five ways: `// As per step 2`, `// Temporary workaround` (undated, no ending condition), `// TODO: remove once the rework lands`, `// Don't change this until phase 5`, `// See the relevance plan for why these values`, and the names `NewRanker` / `LegacyTitleWeight`. Each outlives its referent while still looking meaningful. |
+| `src/SearchIndex.cs` | Temporary information wearing permanent clothes: `// As per step 2`, `// Temporary workaround` (undated, no ending condition), `// TODO: remove once the rework lands`, `// Don't change this until phase 5`, `// See the relevance plan for why these values`, and the names `NewRanker` / `LegacyTitleWeight`. Each outlives its referent while still looking meaningful. |
 | `src/SearchIndex.cs` again | **Positional references into a permanent doc**: `// see note 3 in docs/sharding.md` and `// see the second paragraph of the sharding doc`. Distinct from the case above: `sharding.md` is enduring and correct, and it has no numbered notes at all, so "note 3" already points at nothing. Inserting a paragraph would break the other one silently. Wants a stable marker the doc carries, and the suggestion should say the doc needs to carry it. |
 | `docs/rate-limiting.md` | **The ambiguity case.** Sits in the enduring tree, written in "will be" and "we will", with no date or status marker. Nobody can tell whether this is built. Correct response is to say the class can't be determined and ask, not to pick one. |
 
@@ -263,12 +265,18 @@ has to say which.
 gap, and the correct handling is a Notes observation with the caveat that gaps weren't audited, not a
 finding. A run that turns it into a completeness review has crossed the line this skill holds.
 
-**Both em dashes should go, and the diagnosis still isn't the punctuation.** Sentence 1's dash is
-joining two whole facts and should be a full stop; section 2's is hiding a hedge ("which in practice
-means") that wants deleting rather than repunctuating. So both are findings. What a run must not do
-is stop there: sentence 1 carries four facts and is still broken with a full stop in place of the
-dash, so a report that fixes the punctuation and calls the sentence done has treated the symptom.
-The pass is: recast both, *and* split sentence 1.
+**Two of the four em dashes get their own finding, and the diagnosis still isn't the punctuation.**
+Sentence 1's dash is joining two whole facts and should be a full stop; section 2's is hiding a hedge
+("which in practice means") that wants deleting rather than repunctuating. What a run must not do is
+stop there: sentence 1 carries four facts and is still broken with a full stop in place of the dash,
+so a report that fixes the punctuation and calls the sentence done has treated the symptom. The pass
+is: recast both, *and* split sentence 1.
+
+The other two are in section 3 and want handling in passing rather than as findings of their own.
+"Its own worker task, a sibling of the pipeline worker — same container/ECS-service shape" disappears
+when that paragraph becomes bullets, so a run that bullets section 3 has already fixed it; a run that
+keeps the paragraph should still recast it. "No read on archive — the user originals stay out of
+reach" is noted with section 3 below.
 
 `measure.py` on the whole fixture: 4 em dashes, 10.6 per 1000 words, burstiness 0.68. Both sit inside published-prose
 ranges, which is the point of running it on this fixture. **The numbers do not defend either dash.**
@@ -301,13 +309,13 @@ that catches one instance is doing prose review; one that names the habit across
 doing the job.
 
 **Section 3 is the list that wasn't formatted as one.** "Shape" packs six parallel facts into two
-sentences (own worker task, sibling of the pipeline worker, same container/ECS shape, scaled
+sentences (own worker task and sibling of the pipeline worker, same container/ECS shape, scaled
 independently, runs to completion outside the ingest path, reuses the NetVips core and ensure-routine,
 no image logic of its own). Every fact is present and the wording is fine; the defect is entirely
 presentational, which is why a reviewer tuned only to word-level tells walks past it. The pass is
 bullets with nothing cut. A run that "tightens" the paragraph instead has done the wrong job.
 
-It also carries the third em dash ("no read on archive — the user originals stay out of reach"), and a
+It also carries the last em dash ("no read on archive — the user originals stay out of reach"), and a
 second dropped subject ("Reads base, writes serving"), where "reads" can be parsed as a plural noun
 before the reader reaches "writes".
 

@@ -36,8 +36,8 @@ work from memory of what they probably say:
 with as little of their attention spent as possible. Every judgement in it assumes that goal.
 
 **It is the wrong tool for writing whose value isn't factual transfer.** That covers fiction, poetry,
-song lyrics, personal essays, speeches, and comedy, along with anything else where rhythm, voice,
-ambiguity, imagery, or surprise is the point. This skill would strip precisely what makes that
+song lyrics, personal essays, speeches, and comedy, and anything where rhythm, voice, ambiguity,
+imagery, or surprise is the point. This skill would strip precisely what makes that
 writing work, and confidently explain why each cut was an improvement. The rules here aren't
 universal writing advice; they're what follows from one specific goal.
 
@@ -49,7 +49,7 @@ skill's catalogue to prose it will damage.
 
 Say specifically what you're protecting and why, because the reasons are usually visible: repetition
 in fiction is often refrain, and a closed text has no maintenance cost, so the duplication argument
-that drives Job 1 simply doesn't apply. A rule of three may be the structure of the idea rather than
+that drives Job 1 doesn't apply. A rule of three may be the structure of the idea rather than
 padding. Name the mechanism rather than just declining.
 
 **Marketing copy is out of scope too**, and worth naming separately because technical documentation
@@ -113,8 +113,8 @@ doesn't need it. Decide before you start:
 Reaching for the whole apparatus on a five-line commit message is the same failure as a
 multi-section report on one. See [being proportionate](reference/report-format.md#proportionality).
 
-**Editing runs in passes, in order**, because each one sees defects the others structurally cannot.
-Skipping the author pass is the common mistake, since the fresh editor looks like the rigorous one.
+**Editing runs in passes, in order.** Skipping the author pass is the common mistake, since the
+fresh editor looks like the rigorous one.
 
 ```mermaid
 flowchart TD
@@ -146,10 +146,9 @@ Each pass sees things the others structurally cannot:
 | **Pass 1** author | yes | yes | no | no |
 | **Pass 2** fresh | no | no, defends it | yes | yes |
 
-Pass 2's two blind spots aren't a matter of effort. Given only the page, an invented detail reads
-like a fact the author knows, and unintended rhetoric reads like craft, so a fresh editor protects
-padding the author would have deleted without hesitation. That's why the order matters and why pass 1
-can't be dropped for being cheap.
+Pass 2's two blind spots aren't a matter of effort. Unintended rhetoric reads like craft, so a fresh
+editor protects padding the author would have deleted without hesitation. That's why the order
+matters and why pass 1 can't be dropped for being cheap.
 
 ### Pass 1, the author, before handing over
 
@@ -196,11 +195,12 @@ phrasing as the author's voice and preserve it, so tell it what the register sho
 leaving it to infer one from the draft.
 
 **Work from judgement, not from a checklist.** Read the text, decide what it's doing to its reader,
-and report what you find. The skill deliberately ships no list of named patterns to scan for: going
-in holding one turns a reading into a search, and you find the listed things while walking past the
-unlisted ones. [plain-language.md](reference/plain-language.md) tells you how to weigh what you
-notice (density, what not to cut, how human drafts fail), which is a different thing from telling
-you what to look for.
+and report what you find. There is no general catalogue here to scan against: going in holding one
+turns a reading into a search, and you find the listed things while walking past the unlisted ones.
+A few patterns are named anyway, in Job 2 and in
+[plain-language.md](reference/plain-language.md). Each is there because judgement alone tends to
+miss it, or to talk itself out of the fix. Read them as the exceptions they are, not as the start of
+a checklist. The rest of that file is about weighing what you notice, not about what to look for.
 
 **The brief.** Send this, filling in the bracketed parts. Getting it wrong is the difference the
 whole pass-ordering argument turns on, so don't improvise it:
@@ -442,22 +442,21 @@ keep genuine causal links and make them explicit with a word.
 is the exception. Look at every one and work out what relation it's hiding (two facts, a cause, an
 aside, a definition), then use the punctuation that says it. A comma in its place is not a fix. They
 are worth singling out because the mark is contagious: writers reading model output absorb it, so a
-repo's rate climbs without anyone choosing it. Report them as one finding with a count, not twenty
-entries. See [em dashes](reference/plain-language.md#em-dashes).
+repo's rate climbs without anyone choosing it. See
+[em dashes](reference/plain-language.md#em-dashes) for how to report them.
 
 **A sentence that has to be read twice has already failed.** Grammatical prose can still send a
 reader down the wrong parse: a dropped "that" ("the single decode base generation already holds"), a
 pile of nouns where none of them is marked as the head, a word that could be a noun or a verb at the
 point you meet it. The author can't see these, because they know which reading was meant, so this is
 pass 2 material. **The fix usually adds a word** rather than cutting one, which runs against the rest
-of this skill, so say that in the report. See
+of this skill. See
 [sentences that mislead on first read](reference/plain-language.md#sentences-that-mislead-on-first-read).
 
 **When a paragraph enumerates, make it enumerate.** Four or five parallel facts strung together with
 commas and semicolons is a list that hasn't been formatted as one, and the reader pays to find the
-boundaries. Bullets cost nothing and make each fact findable on a second visit. The limit: bulleting
-an inventory rescues it, bulleting an argument destroys it, because the connective tissue is a fact
-too. See
+boundaries. Bullets cost nothing and make each fact findable on a second visit. The limit: bullet an
+inventory, not an argument. See
 [dense paragraphs that are really lists](reference/plain-language.md#dense-paragraphs-that-are-really-lists).
 
 **Headings name their content.** They're navigation, not marketing, and they're labels rather than

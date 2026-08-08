@@ -526,7 +526,7 @@ The table of numbers doesn't.
 Where the values genuinely must appear in prose (an example in a tutorial, a worked walkthrough),
 make it obviously an illustration rather than a specification, and link to the real list.
 
-### Configuration values have no single answer
+### Layered configuration values
 
 Worth separating out, because it's the case where documenting a value isn't merely fragile but
 impossible. A typical setting exists in layers: a default on the options class, a base config file,

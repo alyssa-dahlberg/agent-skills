@@ -1,8 +1,9 @@
 # Detection spec
 
-**What this skill is expected to catch, not instructions for catching it.** Nothing here is loaded at
-runtime. It exists so that changes to the skill can be tested against a stable list of what good
-output looks like, and so the reasoning behind the list isn't lost.
+**What this skill is expected to catch, not instructions for catching it.** Not part of the skill's
+own instructions; the one time a run reads it is to name specific tells when consulting a model from
+another family. It exists so that changes to the skill can be tested against a stable list of what
+good output looks like, and so the reasoning behind the list isn't lost.
 
 ## Why this isn't in the skill
 
@@ -20,7 +21,7 @@ these patterns without being shown a list.** What they lacked, and what the skil
 placement and verification work: which artifact owns a fact, whether a documented value survives its
 config overrides, how long a document is meant to last.
 
-So this is a record, not a rule set. It's here for three jobs:
+So this is a record, not a rule set. It's here for these jobs:
 
 - **Eval coverage.** Every entry should be exercised by a fixture, or knowingly not. See the coverage
   table below.
@@ -346,8 +347,10 @@ landscape, realm, seamless, robust, crucial, pivotal, underscore, showcase, comp
 myriad, testament*. Ask what each is claiming. "Robust error handling" claims nothing; "retries three
 times with backoff, then dead-letters" is the fact.
 
-**Emphasis crutches.** *genuinely, fundamentally, truly, actually, simply, at its core, load-bearing,
-critically*. These add insistence, not information. Almost always deletable without loss.
+**Emphasis crutches.** *genuinely, fundamentally, truly, actually, simply, at its core, critically*.
+These add insistence, not information. Almost always deletable without loss. The test is whether the
+word is doing contrastive work: "which of these did I *actually* mean" earns it, "this is
+*fundamentally* a placement problem" doesn't.
 
 **Intensified adjectives.** "Extremely important", "highly optimised", "significantly faster".
 Either give the number or drop the intensifier.

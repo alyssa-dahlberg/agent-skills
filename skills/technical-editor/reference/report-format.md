@@ -149,8 +149,8 @@ Use it for:
 
 - **Facts you need.** "I couldn't tell whether the worker still shares the API's connection pool.
   If it doesn't, the paragraph in §3 is wrong, not just wordy."
-- **What you couldn't reach.** Files you didn't read, links you couldn't resolve, claims you
-  couldn't verify. These are the limits of the pass, not gaps in the document.
+- **What you couldn't reach.** Files you didn't read, links you couldn't resolve. These are the
+  limits of the pass, not gaps in the document.
 - **What's good.** Specifically, not as a courtesy. If a section is well-scoped and well-placed,
   saying so tells the author what to keep doing, and it's the difference between an editor people
   invite back and one they route around.
