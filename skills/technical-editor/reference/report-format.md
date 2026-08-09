@@ -6,13 +6,13 @@ actionable on its own, without reading the others.
 ## A single suggestion
 
 ```
-### <file>:<line> — <one-line summary>
+### <one-line summary> (<file>:<line>)
 
 **Now:**
 > <the current text, quoted exactly>
 
 **Suggested:**
-> <the replacement text, ready to paste — or "Delete." >
+> <the replacement text, ready to paste, or "Delete.">
 
 **Why:** <what this costs the reader, in one or two sentences>
 ```
@@ -73,7 +73,7 @@ complete and useful review.
 
 ## Prefer deletions to substitutions
 
-A report made mostly of word swaps — "for the duration of" → "during", "be considered" → "count as" —
+A report made mostly of word swaps ("for the duration of" → "during", "be considered" → "count as")
 is a weak report, even when every swap is correct. It saves a handful of words and leaves the
 structure untouched.
 
@@ -83,12 +83,12 @@ whether the text should exist at all. Rewriting a sentence you could have delete
 both sides.
 
 This is also a check on your own report. If nothing you're proposing removes a whole sentence, either
-the draft is genuinely tight — say so — or you're being deferential, reading padding as intent and
-tidying around it rather than cutting it.
+the draft is genuinely tight, in which case say so, or you're being deferential, reading padding as
+intent and tidying around it rather than cutting it.
 
 ## State the lifespan you judged
 
-Say near the top which class you took each artifact to be — enduring, in-flight, or frozen — and on
+Say near the top which class you took each artifact to be (enduring, in-flight, or frozen) and on
 what evidence:
 
 > *Read `docs/caching.md` as enduring (sits in the reference tree, describes the system as built) and
@@ -97,7 +97,7 @@ what evidence:
 
 This is the judgement most likely to be wrong and the one that changes everything downstream, since
 it decides which ruleset applied. It's cheap for the caller to correct and expensive if it stays
-silently wrong — a report that quietly held a working note to the enduring bar reads as a long list
+silently wrong: a report that quietly held a working note to the enduring bar reads as a long list
 of real defects.
 
 Where you couldn't tell, say that instead of picking one. An artifact whose class isn't apparent is
@@ -121,19 +121,17 @@ You don't know what they have.
 
 ## Say how the pass was run
 
-If the edit ran inline rather than in a fresh subagent — because no dispatch tool was available, or
-the caller asked for a quick look — put one line at the top of the report saying so:
+If the edit ran inline rather than in a fresh subagent, because no dispatch tool was available or
+the caller asked for a quick look, put one line at the top of the report saying so:
 
 > *Edited inline; not a fresh-context pass.*
 
 Say which model family reviewed, when the draft was machine-written and you know:
 
-> *Reviewed by the same model family that wrote this — treat a clean bill on tics accordingly.*
+> *Reviewed by the same model family that wrote this. Treat a clean bill on tics accordingly.*
 
 A reviewer from the same lineage as the writer shares its blind spots, so "found no tells" carries
-less weight than it appears to. If you consulted a model from another family on any of the prose, say
-which parts and what it said — including where it disagreed with you, since that disagreement is the
-part a reader can't reconstruct.
+less weight than it appears to.
 
 A reader weighs the findings differently when they know the editor had already seen the draft being
 written, and the absence of findings differently again. Silence about this is the misleading part,
@@ -147,10 +145,10 @@ agreement that never happened.
 
 Use it for:
 
-- **Facts you need.** "I couldn't tell whether the worker still shares the API's connection pool —
-  if it doesn't, the paragraph in §3 is wrong, not just wordy."
-- **What you couldn't reach.** Files you didn't read, links you couldn't resolve, claims you
-  couldn't verify — the limits of the pass, not gaps in the document.
+- **Facts you need.** "I couldn't tell whether the worker still shares the API's connection pool.
+  If it doesn't, the paragraph in §3 is wrong, not just wordy."
+- **What you couldn't reach.** Files you didn't read, links you couldn't resolve. These are the
+  limits of the pass, not gaps in the document.
 - **What's good.** Specifically, not as a courtesy. If a section is well-scoped and well-placed,
   saying so tells the author what to keep doing, and it's the difference between an editor people
   invite back and one they route around.

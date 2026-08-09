@@ -3,7 +3,7 @@
 Each example shows the original, the fix, and the general pattern behind it. Match the pattern, not
 the wording.
 
-The file paths and languages here are illustrative — one plausible repo, not a recommended layout.
+The file paths and languages here are illustrative: one plausible repo, not a recommended layout.
 Where an example says a fact belongs in a particular file, read it as "the place this repo keeps that
 kind of thing". Find out what the repo in front of you actually does before proposing a move.
 
@@ -25,7 +25,7 @@ that is spent attention.
 
 **After:** `### Why`
 
-"For this project specifically" is true of everything in the document — it's a project document. "Why
+"For this project specifically" is true of everything in the document, which is a project document. "Why
 this matters" is what a "Why" heading means.
 
 **Pattern:** delete words in a heading that are implied by where the heading is.
@@ -80,7 +80,7 @@ retryCount++;
 
 **But:** if there's something non-obvious, that's what the comment is for:
 ```csharp
-// Counts attempts, not retries — the first call increments too, so the cap is off by one
+// Counts attempts, not retries. The first call increments too, so the cap is off by one
 // from what the config name suggests.
 retryCount++;
 ```
@@ -115,7 +115,7 @@ implementers is a leaked abstraction and a staleness trap.
 **Before:** The retry policy is described in `docs/architecture.md`, again in
 `src/Worker/README.md`, and again in the doc comment on `RetryPolicy`.
 
-**After:** The doc comment on `RetryPolicy` owns it — closest to the code, hardest to leave stale.
+**After:** The doc comment on `RetryPolicy` owns it: closest to the code, hardest to leave stale.
 `src/Worker/README.md` links to the type. `docs/architecture.md` says that the worker retries and
 links to the module README, because at architecture altitude the fact is "it retries", not the
 backoff schedule.
@@ -157,7 +157,7 @@ public bool CanEdit(User user, Document doc)
 
 The comment exists because `Check` says nothing. Renaming carries the same information to every
 reader at every call site, and can't drift from the code. Note that the "taking ownership and lock
-state into account" half is describing the implementation — that's a leak, and it goes when the
+state into account" half is describing the implementation. That's a leak, and it goes when the
 method is named honestly.
 
 **Pattern:** a comment restating what a method does is evidence the name is wrong. Propose the
@@ -177,7 +177,7 @@ public void Record(string status, int timeoutMs)
 public void Record(SettlementStatus status, TimeSpan timeout)
 ```
 
-Both comments were doing a type's job — unenforced, invisible at the call site, and stale the moment
+Both comments were doing a type's job: unenforced, invisible at the call site, and stale the moment
 a fourth status appears. The type is checked, shows up in autocomplete, and makes the wrong call
 impossible rather than merely documented.
 
@@ -194,7 +194,7 @@ environment sets it to. `docs/architecture.md` mentions the production value aga
 > Each environment sets `MaxConnections` to its RDS instance's connection limit, minus headroom for
 > migrations. Current values: `config/`.
 
-`docs/architecture.md` drops the number entirely — at architecture altitude the fact is "the worker
+`docs/architecture.md` drops the number entirely. At architecture altitude the fact is "the worker
 bounds its pool", and the specific value is a rung below. `AppOptions` keeps the option; that's the
 definition.
 
@@ -221,3 +221,64 @@ Design and invalidation rules: src/Caching/README.md
 
 **Pattern:** durable knowledge in a commit message is only findable by someone already running
 `git log` on the right file. Put it in the repo and leave a pointer.
+
+## 14. Offhand phrasing kept as voice
+
+**Before:** `## Scale to crush`, a section on horizontal scaling, written up from a design
+discussion where someone said "then we can scale up resource to crush it".
+
+**After:** `## Scaling`
+
+The phrase came from speech, not from a decision about what to call anything. Written down it looks
+like the author's voice, so the next editor protects it, and the one after that reads it as house
+style. "Crush" adds confidence rather than information, and a reader who wasn't in that discussion
+gets nothing from it, while the heading is simultaneously an index entry, a link target, and a
+search term.
+
+Compare a case that stays: `## Backfill`, for a section on populating the index for existing rows.
+That is a named concept with a settled meaning, and using the name consistently is what makes it
+useful.
+
+**Pattern:** protect intent, not provenance. A metaphor doing explanatory work and a named concept
+earn their place; a phrase that only exists because someone said it once does not.
+
+## 15. Sentences that have to be read twice
+
+**Before:** "Derivative sizes are generated up front, at ingest, from the single decode base
+generation already holds."
+
+**After:** "Derivative sizes are generated up front, at ingest, from the single decode that base
+generation already holds."
+
+Two defects stacked. `single decode base generation` is a four-noun stack, so the reader can't tell
+where the noun phrase ends; and the relativizer is missing, so "already holds" arrives with nothing
+to attach to. The reader parses the whole stack as the subject, hits the verb, and has to go back.
+
+Restoring `that` is the one-word fix and it is worth doing on its own. The stronger rewrite splits
+the stack as well: "...from the single decode that the base-generation step already holds."
+
+**Pattern:** a misread costs more than the word that prevents it. This is the rare fix that adds
+words, so say so in the report, or an author trained on "omit needless words" will push back.
+
+## 16. A paragraph that is really a list
+
+**Before:** "Its own worker task, a sibling of the pipeline worker, with the same
+container/ECS-service shape, so it can be scaled independently and run to completion rather than
+sitting in the ingest path. It reuses the NetVips core and the ensure-routine; it holds no image
+logic of its own."
+
+**After:**
+
+> - Its own worker task, a sibling of the pipeline worker
+> - Same container and ECS-service shape
+> - Scaled independently
+> - Runs to completion, outside the ingest path
+> - Reuses the NetVips core and the ensure-routine
+> - Holds no image logic of its own
+
+Six parallel facts, packed into two sentences by commas and semicolons that are doing two jobs at
+once. Nothing is cut and no wording is improved; the facts simply become countable, and each one
+becomes something a returning reader can find without re-reading the paragraph around it.
+
+**Pattern:** when a paragraph enumerates, let it enumerate visibly. The test is whether the items are
+parallel and order-independent. Bulleting an argument destroys it; bulleting an inventory rescues it.

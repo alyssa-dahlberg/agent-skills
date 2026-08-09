@@ -32,7 +32,12 @@ def report(path):
         print(f"sentence length mean {mean:.1f}  sd {sd:.1f}  burstiness {sd/mean:.2f}"
               f"   (human 0.6-1.2, machine 0.2-0.4)")
     em = text.count("—")
-    print(f"em dashes {em}  ({em/max(words,1)*1000:.1f} per 1000 words; human 3.7-10, GPT-4 ~10.6)")
+    # The corpus range is context, not a target. It averages over published prose including
+    # literary writing, where the em dash is a deliberate instrument. Technical docs that never
+    # reach for it read fine, so "within the human range" is not a defence of any single dash.
+    # Compare against this repo's own rate; a document above its neighbours is the signal.
+    print(f"em dashes {em}  ({em/max(words,1)*1000:.1f} per 1000 words; "
+          f"published prose 3.7-10, GPT-4 ~10.6 — a range, not a budget)")
     for name, pat in TELLS.items():
         n = len(re.findall(pat, text, re.I))
         if n:
