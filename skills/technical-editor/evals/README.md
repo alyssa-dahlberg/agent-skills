@@ -3,10 +3,9 @@
 Test inputs for the skill, with known answer keys. Synthetic unless noted, written for this purpose and
 not taken from anyone's repository. `backfill-design-excerpt.md` is the exception and says so.
 
-These fixtures are for whoever is changing the skill and wants to know whether they made it worse,
-and nothing here loads when the skill runs. The exception is [detection-spec.md](detection-spec.md),
-which a run reads when it consults a model from another family. See [../DESIGN.md](../DESIGN.md) for
-what previous runs found.
+These fixtures are for whoever is changing the skill and wants to know whether they made it worse.
+Nothing here loads when the skill runs. See [../DESIGN.md](../DESIGN.md) for what previous runs
+found.
 
 [detection-spec.md](detection-spec.md) lists what the skill is expected to catch, and maps each
 pattern to the fixture exercising it. Start there when adding a fixture; the table says what isn't
@@ -68,6 +67,26 @@ keeps a document honest. A reviewer should still check links by hand where it ma
 catches dead targets but not references that now point at the *wrong* thing, which is the failure
 mode [reference by identity](../reference/information-architecture.md#reference-by-identity-not-position)
 is about.
+
+`trigger_eval.py` measures whether the description makes a model reach for the skill. It installs
+the skill into a throwaway project, runs each query in `trigger-evals.json` through `claude -p`, and
+records whether the run called the Skill tool naming it. Nothing touches this repo.
+
+```bash
+./trigger_eval.py --selftest             # prove it can detect a trigger at all
+./trigger_eval.py                        # score the description in SKILL.md
+./trigger_eval.py --description "..."    # score a candidate against the same set
+```
+
+**Run the self-test every time, and read it before any score.** It installs a control skill the
+model cannot answer from general knowledge and asks a question that needs it. A harness that can't
+detect a trigger returns zero for a good description and zero for a bad one, and nothing in the
+output distinguishes them. That is not hypothetical: `skill-creator`'s `run_eval.py` registers the
+skill under test by writing into `.claude/commands/`, which produces a *slash command*. Slash
+commands are listed to the model separately from skills and are invoked by the user, not chosen by
+the model, so the Skill tool call it watches for can never fire. It scored zero on every query here
+across three iterations, and the zeros were read as a weak description for a while. See
+[../DESIGN.md](../DESIGN.md).
 
 ## Fixtures
 

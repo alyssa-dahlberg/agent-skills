@@ -1,8 +1,7 @@
 # Detection spec
 
-**What this skill is expected to catch, not instructions for catching it.** Not part of the skill's
-own instructions; the one time a run reads it is to name specific tells when consulting a model from
-another family. It exists so that changes to the skill can be tested against a stable list of what
+**What this skill is expected to catch, not instructions for catching it.** Nothing here loads when
+the skill runs. It exists so that changes to the skill can be tested against a stable list of what
 good output looks like, and so the reasoning behind the list isn't lost.
 
 ## Why this isn't in the skill
@@ -29,12 +28,6 @@ So this is a record, not a rule set. It's here for these jobs:
   the guidance back, and this file is what to put back.
 - **Design memory.** So the next person doesn't rediscover the list, add it to the skill, and repeat
   the experiment.
-- **Prompting a consulted model.** If you ask a model from another family for a second opinion on
-  prose, naming the specific tells you care about gets a much sharper answer than "review this for
-  clarity", and this is the list to paste in. That isn't the anchoring problem returning: anchoring
-  is about a reviewer narrowing its own independent reading, and a targeted second opinion is a
-  different job with a question already attached.
-
 If you are editing the skill and reaching for something here, check the coverage table first: the
 question is whether current models still handle it, and that is measurable.
 

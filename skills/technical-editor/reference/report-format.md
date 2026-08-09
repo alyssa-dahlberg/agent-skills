@@ -131,9 +131,7 @@ Say which model family reviewed, when the draft was machine-written and you know
 > *Reviewed by the same model family that wrote this. Treat a clean bill on tics accordingly.*
 
 A reviewer from the same lineage as the writer shares its blind spots, so "found no tells" carries
-less weight than it appears to. If you consulted a model from another family on any of the prose, say
-which parts and what it said, including where it disagreed with you, since that disagreement is the
-part a reader can't reconstruct.
+less weight than it appears to.
 
 A reader weighs the findings differently when they know the editor had already seen the draft being
 written, and the absence of findings differently again. Silence about this is the misleading part,

@@ -183,36 +183,27 @@ This is also why the skill asks for a strong model, and the most *different* one
 is worst at spotting the tics it produces itself, so a review from the same lineage as the writing
 can return a clean bill that only means both write the same way.
 
-**Cross-family review is a consultation, not a pass.** An intermediate version suggested dispatching
-the editing pass itself to a different family. That doesn't work in general: pass 2 earns its place
-by exploring the repo, so whatever runs it needs to be able to. The flow stays with the agent
-following this skill, which runs the passes, weighs what comes back and decides what to apply, and a
-second family gets asked a targeted question where its distance pays, which is recognising tics a
-same-lineage reviewer shares. Its answer is one opinion, and a disagreement with the main pass is
-worth reporting rather than silently resolving.
+### Cross-family consultation: tried, then removed (August 2026)
 
-**Then a second correction, in the other direction.** The next version described the consulted model
-in detail: no file access, one question per call, slow, paste the text rather than a path. All true
-of the setup it was checked against, and none of it generally true: someone else's access to another
-family might be a full agent that reads files perfectly well. Those constraints were knowledge about
-one tool, written as though they were properties of the idea.
+`SKILL.md` carried an optional step telling a run to ask a model from another family about the prose,
+on the argument that recognising its own tics is the one thing a same-lineage reviewer can't do. The
+argument still looks right. The step didn't pay for its space.
 
-So the guidance now states only what generalises: you stay in command, use what you have on its own
-terms and read its documentation for the limits, ask a specific question, weigh the answer as one
-opinion, know where the text goes. **The general lesson for this skill: when writing about capability
-that varies by environment, say what the caller should establish, not what you happen to know about
-one setup.**
+It needed correcting twice before it was dropped. An intermediate version had the *editing pass*
+dispatched to a different family, which doesn't work in general: pass 2 earns its place by exploring
+the repo, so whatever runs it must be able to. The next version described one local setup's
+constraints (no file access, one question per call, paste the text rather than a path) as though they
+were properties of the idea, when someone else's access to another family might be a full agent that
+reads files perfectly well.
 
-Deliberately names no tool. What is reachable differs by machine and changes over time, so a skill
-that hardcodes one goes stale or misleads. It also flags that a hosted model means sending repo text
-off the machine, which is a decision the caller has to make knowingly.
+What settled it was using it. Run against `SKILL.md` itself, a local Gemma 26B returned seven
+findings: two correct but trivial cuts, two that agreed with what the main pass had already found,
+one that made an aphorism longer, and two proposed rewrites of the antithetical frame that
+reintroduced the frame they had just flagged. One opinion, for a section of the skill and a minute
+per call.
 
-**This gave the detection spec a runtime use after all.** A raw model answers a vague prompt vaguely,
-so naming the tells you want checked produces a far better second opinion than "review this for
-clarity", and the spec is the list to paste in. That is not the anchoring problem coming back.
-Anchoring is a reviewer narrowing its own independent reading; a consulted model is answering a
-question that already has a subject. The distinction is worth holding, because it is the difference
-between a list that shapes what gets noticed and one that scopes a specific request.
+The general lesson outlives the step: **when writing about capability that varies by environment, say
+what the caller should establish, not what you happen to know about one setup.**
 
 ### Two patterns where the fix adds words
 
@@ -411,9 +402,13 @@ claiming density, the out-of-scope rewrite, and preferring deletions to substitu
 
 - **The pattern enumerations are close to inert.** Tested directly (see the anchoring experiment).
   Cutting them changed nothing measurable. They now live in `evals/detection-spec.md`, outside the
-  skill's own instructions, so they cost nothing except when a run consults another model family and
-  pastes them in. That consultation is what now justifies keeping them; if it stops being how anyone
-  uses the file, delete them rather than deferring again. An outside review pointed out that the
+  skill's own instructions, so nothing loads them at runtime at all. An earlier version of this note
+  made the cross-family consultation their last justification and said to delete them once that
+  stopped being how anyone used the file. That condition fired in August 2026, and the answer on
+  review was to keep them: the coverage table maps each pattern to the fixture exercising it, and
+  "what to put back if a future model stops catching this" is the list itself. The delete-rule was
+  written as though the consultation were the only remaining use, which the same file contradicts
+  three lines earlier. An outside review pointed out that the
   "pass 3 measures its own worth" argument cannot work, because runs are stateless and nobody
   aggregates outcomes across them.
 - **Waffle correlates with the writing task more than the model, but the effect is smaller than it
@@ -442,38 +437,98 @@ claiming density, the out-of-scope rewrite, and preferring deletions to substitu
 - **Hand-maintained contents blocks** in the reference files. Deleted after one drifted within a
   single edit cycle. The skill's own rule is "generate it, or link it".
 
-## Trigger accuracy is unmeasured
+## Trigger accuracy
 
-The description has never been tested, and `skill-creator`'s `run_loop.py` could not test it here.
+Measured in August 2026, after two false starts that are worth more than the numbers.
 
-An attempt returned a trigger rate of **0 on every query, positives and negatives alike**, across
-three iterations and every candidate description. A weak description produces some triggers; zero on
-everything means the instrument, not the subject. The harness works by writing a temporary file into
-`.claude/commands/` and watching a `claude -p` stream for a `Skill` tool call naming it, a mechanism
-that did not fire in this environment. It cleans up after itself, so there is nothing to remove, but
-the numbers it produced are meaningless and no description change was made on the strength of them.
+**The old harness could not detect a trigger at all.** `skill-creator`'s `run_eval.py` returned 0 on
+every query, positives and negatives alike, across three iterations and every candidate description,
+and those zeros were read as a weak description for a while. They were the instrument. It registers
+the skill under test by writing into `.claude/commands/`, which produces a *slash command*. Reading
+the session init event shows why that can never work: a file in `.claude/commands/` appears in
+`slash_commands` and never in `skills`, and slash commands are invoked by the user rather than chosen
+by the model, so the `Skill` tool call the harness watches for cannot happen. A second bug would have
+survived the first: it returns false at the first tool call that isn't `Skill` or `Read`, so a run
+opening with `Glob` or `TodoWrite` scores as a miss even when it calls the skill immediately after.
 
-**If you retry:** confirm the harness can detect a trigger at all before reading any score. Run one
-query you are certain should fire and check for a non-zero rate. A run where the negatives also score
-zero is measuring nothing.
+`evals/trigger_eval.py` replaces it, in this repo rather than as a patch, because the plugin file
+lives in a marketplace cache and a patch would be reverted on the next update. It installs a real
+skill into a throwaway project and scans the whole run. It leads with a self-test for exactly the
+reason above.
 
-The eval set is worth keeping if you rebuild this: 20 queries, half should-trigger, with near-misses
-chosen to be genuinely hard (fixing broken links in `docs/` is docs-shaped but mechanical; generating
-API reference from a spec is documentation but not editing; sharpening landing-page copy is editing
-but out of scope).
+**The second false start was the fixture.** The first real run scored 0/10 on positives. The queries
+name files (`apps/payments/README.md`), the throwaway project seeded them as one-line placeholders,
+and every positive run spent its turn with `Read` and `Bash` discovering there was nothing to edit.
+Seeding a few hundred words of mediocre prose instead took the same description from 0/10 to 7/10.
+**A trigger fixture has to contain work worth doing**, or it measures whether the model can find the
+file.
 
-So this remains an open question, and a live risk. The skill asks to be reached for proactively on
-ordinary writing. But a model consults a skill mainly for work it cannot already do, and "look over
-this README" reads as work it can. If the skill under-triggers in practice, that is the likeliest
-reason, and no amount of internal quality compensates.
+Three descriptions, 20 queries, 3 runs each, same seeded project and model:
+
+| | | positive fires | queries passing | false fires |
+|---|---|---|---|---|
+| **A** | the shipped description, 155 words | 19/30 | 7/10 | 0/30 |
+| **B** | rewritten to 105 words, tells list cut | 15/30 | 5/10 | 1/30 |
+| **C** | keywords restored, capability clause added, 145 words | 17/30 | 6/10 | 2/30 |
+
+**A is what ships.** Nothing beat it, and it is the only arm with no false fires. B came out of an
+editorial pass that cut the description's list of tells as context pollution, on the argument that
+the skill spends `plain-language.md` keeping exactly that catalogue out of the runtime path. The
+argument misapplies a Job 2 rule to a field that is not prose: a description is matching surface,
+read to decide whether to open the skill, and once it fires the body governs. A description
+restating the body is duplication worth paying for.
+
+**Don't over-read the per-query differences.** The obvious causal story, that each regression traces
+to a phrase B cut, survives one test out of three: restoring "restating it in three documents that
+drift apart" moved the duplication query back (3→1→2), but restoring "marketing headings" did not
+recover the headings query (2→0→0) and restoring "dictation tics" did not recover the dictation
+query (3→2→2). At three runs a query, a 2/3 result is not a signal. The arm totals order
+consistently on both measures; the individual queries mostly don't.
+
+### Inviting use harder does nothing
+
+A second round at five runs a query tested whether a more insistent invitation raises the rate. D
+anchored it to a moment in the workflow ("run it over any writing you are about to hand over, before
+opening a PR or asking for review"). E went as far as the field allows ("use on everything").
+
+| | recall | wasted fires | scope-adjacent fires |
+|---|---|---|---|
+| **A** incumbent | 32/50 | 1/35 | 0/15 |
+| **D** before a PR | 31/50 | 1/35 | 0/15 |
+| **E** use on everything | 31/50 | 2/35 | 0/15 |
+
+**The invitation clause is inert.** It moved nothing in either direction, and the precision cost that
+was the reason for caution never appeared: the three negatives where firing would be defensible
+anyway (fiction, landing-page copy, a launch blog post, all cases where the skill's documented
+response is to say the rules don't apply and then help) drew zero fires in every arm. Note also that
+the description has only about 58 characters of headroom under the 1024 limit, so any addition is
+paid for by a deletion. D and E both bought their clause by cutting "reviews what is written rather
+than auditing for what is missing", which cost nothing measurable.
+
+**What decides it is the shape of the request, not the wording of the description.** Three positives
+failed 0/15 in every arm: the 12-line commit message, doc comments on `IOrderStore` naming a
+concrete implementation, and a setup guide contradicting `appsettings`. The tempting read is that
+these are the non-markdown cases and the description leads with markdown. That does not survive
+contact with the text: the description already names code comments, doc comments and commit messages
+in its second sentence, and naming them plainly is not enough.
+
+The queries that fire are open-ended and large ("does it read alright?", "what should move out or get
+cut", "check the writing quality", and a duplication spanning three files). The queries that never
+fire all hand the model a diagnosed defect in a single small artifact, and it simply does the fix.
+This is the risk this section always named, now with evidence: a model consults a skill mainly for
+work it cannot already do. It is unlikely to be fixable from the description at all, so the lever, if
+one is wanted, is outside it: a project instruction, or a hook.
 
 ## Re-running the evaluation
 
 `skill-creator`'s `quick_validate.py` catches frontmatter breakage, and it has already caught an
 unquoted colon in the description (which would have stopped the skill loading) and a description over
-the 1024-character limit. Run it after any frontmatter edit.
+the 1024-character limit. Run it after any frontmatter edit. The colon mistake recurred in August
+2026, in a rewrite that began "Out of scope: fiction", so treat it as a standing hazard rather than a
+one-off: the description is a single-line YAML scalar and any natural-sounding `word: word` breaks it.
 
-For behavioural evals, see [evals/README.md](evals/README.md) for the fixtures, their answer keys, and
+For trigger accuracy, `evals/trigger_eval.py`, self-test first. For behavioural evals, see
+[evals/README.md](evals/README.md) for the fixtures, their answer keys, and
 the two methodology traps that caught us during development: baselines are strong, so always run one;
 and a review-shaped prompt flatters the baseline by putting it in critic mode, which is not how the
 skill is actually used.
