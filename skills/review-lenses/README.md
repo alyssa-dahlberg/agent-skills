@@ -33,15 +33,15 @@ URL — the reviewer opens them at review time, so findings track the source and
 paraphrase baked into a prompt. Conventions live where they belong; the review layer is where "does
 this follow them?" actually gets answered.
 
-## A strong `docs/` folder pays double
+## Written-down conventions pay double
 
-The author keeps a rich, human-readable `docs/` folder in every repo — architecture, conventions, the
-*why* behind decisions — written for people first. Review lenses then **cite those docs instead of
-restating them**, so the same words that onboard a human also drive the review, and neither can drift
-from the other without the other noticing. The two go hand in hand: when you're deciding where a
-convention should live, write it in `docs/` for the humans and point a lens at it. A reference-backed
-lens over a good docs folder is the ideal end state; self-contained lenses are how you start before the
-docs exist.
+Wherever your repo keeps its human-readable docs — architecture, conventions, the *why* behind
+decisions — write them for people first. Review lenses then **cite those docs instead of restating
+them**, so the same words that onboard a human also drive the review, and neither can drift from the
+other without the other noticing. The two go hand in hand: when you're deciding where a convention
+should live, write it down for the humans and point a lens at it. A reference-backed lens over good
+docs is the ideal end state; self-contained lenses are how you start before the docs exist. The skill
+doesn't care where the docs live or how they're laid out; that's the repo's call.
 
 ## Composable, isolated, and cheap to experiment
 

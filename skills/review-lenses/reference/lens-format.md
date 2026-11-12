@@ -32,7 +32,7 @@ level: detail                        # broad | detail — a hint for sequencing,
 Look for: <specific, checkable things>. Cite the reference and section in each finding.
 
 References — the reviewer opens every one before reviewing:
-- `docs/testing.md`                      (local path — read from the working tree)
+- `CONTRIBUTING.md#testing`              (local path — read from the working tree)
 - https://example.com/some-standard      (URL — fetched at review time)
 ```
 
