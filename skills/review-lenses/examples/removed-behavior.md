@@ -4,6 +4,7 @@ concern: Deletions that silently drop a guarantee — a guard, error path, valid
 triggers:
   - "**/*"
 level: detail
+model: standard   # tracing whether a dropped guarantee is re-established elsewhere
 ---
 
 > **This is an example lens** — self-contained, and the kind most hand-written lens sets miss.

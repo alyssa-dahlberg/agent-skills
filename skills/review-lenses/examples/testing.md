@@ -8,6 +8,7 @@ triggers:
   - "**/test/**"
   - "**/tests/**"
 level: detail
+model: standard   # judging test honesty and isolation — mid tier
 ---
 
 > **This is an example lens**, and a **self-contained** one: it cites no references, so the body is the

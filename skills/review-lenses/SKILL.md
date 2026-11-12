@@ -1,6 +1,6 @@
 ---
 name: review-lenses
-description: Review code, a plan, a design, or an idea through one or more lenses. Accepts plain-English requests — "review this branch", "review the architecture of these interfaces", "check the payment flow against PCI concerns", "sanity-check this idea". Resolves the request into review jobs (each one lens × one target), dispatches read-only reviewers, and collates one report. A lens is a small markdown file in .review-lenses/ describing one concern; adding a concern is dropping a file. Use whenever the user or a calling agent asks to review, check, or sanity-check anything — and reach for it proactively — any agent can and should self-serve a review of its own work before handing it over (before finalizing a change, after anything security-sensitive, when unsure). It's cheap, read-only, and you don't need to be asked.
+description: Review code, a plan, a design, or an idea through one or more lenses. Accepts plain-English requests — "review this branch", "review the architecture of these interfaces", "check the payment flow against PCI concerns", "sanity-check this idea". Resolves the request into review jobs (each one lens × one target), dispatches read-only reviewers, and collates one report. A lens is a small markdown file in a .review-lenses/ directory (repo or user-level) describing one concern; adding a concern is dropping a file. Use whenever the user or a calling agent asks to review, check, or sanity-check anything — and reach for it proactively — any agent can and should self-serve a review of its own work before handing it over (before finalizing a change, after anything security-sensitive, when unsure). It's cheap, read-only, and you don't need to be asked.
 allowed-tools:
   - Bash
   - Read
@@ -25,7 +25,7 @@ should invoke it on its *own* work before handing it back: before finalizing a c
 security-sensitive, whenever unsure. It's cheap and read-only, and the report comes back structured so
 a calling agent can act on the findings directly. Reach for it proactively; you don't need to be asked.
 
-Two axes, kept independent: a **lens** = *what to look for* (a file in `.review-lenses/`); a **target**
+Two axes, kept independent: a **lens** = *what to look for* (a file in a `.review-lenses/` directory, repo or user-level); a **target**
 = *what to look at* (a diff, a class, a plan phase, a whole plan, a design doc, an idea). Any lens
 applies to any target. A **job** is one lens on one target. See [reference/lens-format.md](reference/lens-format.md)
 for the lens file format and [reference/reviewer-brief.md](reference/reviewer-brief.md) for the brief you
@@ -40,15 +40,19 @@ proceed (use `AskUserQuestion` for real forks like "phase 3 — the evaluator or
 subagent (an agent self-reviewing its work), infer and proceed, leaning on `UNRESOLVED` findings for
 anything you can't settle.
 
-**Find the lenses.** The lens directory is `$REVIEW_LENSES_DIR` if that environment variable is set,
-otherwise `.review-lenses/` at the repo root:
+**Find the lenses.** Lenses come from a list of directories, searched in order. By default that is
+`.review-lenses/` at the repo root, then `~/.review-lenses/` in the user's home. `REVIEW_LENSES_DIR`,
+if set, is a colon-separated list that replaces the defaults entirely:
 ```bash
-echo "${REVIEW_LENSES_DIR:-.review-lenses}"
+IFS=: read -ra LENS_DIRS <<< "${REVIEW_LENSES_DIR:-.review-lenses:$HOME/.review-lenses}"
+for d in "${LENS_DIRS[@]}"; do [ -d "$d" ] || continue; ls "$d"/*.md; done
 ```
-`REVIEW_LENSES_DIR` lets a project point at a custom location; how you set an env var depends on your
-harness (e.g. in Claude Code, add it to `.claude/settings.json` under `"env"`). Read the frontmatter of
-every `*.md` in that directory **except `README.md`** — take `concern`, `triggers`, `level`. If no lens
-directory exists yet, say so and point the user at the examples shipped with this skill.
+Take the union of every `*.md` in those directories **except `README.md`**, reading each file's
+frontmatter for `name`, `concern`, `triggers`, `level`, `model`. **Earlier directories win:** when two
+files share a `name`, keep the first one found and drop the rest, so a repo lens replaces a personal
+lens of the same name. How you set an env var depends on your harness (e.g. in Claude Code, add it to
+`.claude/settings.json` under `"env"`). If no directory on the list exists, say so and point the user
+at the examples shipped with this skill.
 - *Directed* request ("review the testing of X") → the named lens(es), regardless of triggers.
 - *Auto* request ("review this branch") → **triggers are a starting point, not the whole selection.**
   Do two passes:
@@ -106,14 +110,22 @@ agent the repo ships works too; otherwise use a general-purpose agent instructed
 **Don't dispatch a reviewer to a lens with URL references on an agent type that lacks web tools** — it
 would silently fall back to reviewing from memory, the exact drift this design avoids.
 
-**Size the model to the job.** The dispatch tool takes a `model` parameter — use it. If the lens sets a
-`model` hint, honour it, mapping the tier to the host's models: `fast` → the cheapest/quickest, `deep` →
-the most capable, `standard` → the default. If the lens gives no hint, infer: a `broad`-level or
-understanding-heavy lens (architecture, security-surface, a design/plan target) wants the strongest
-model; a deterministic or scripted lens (a grep sweep like `banned-patterns`) runs fine on the
-cheapest, fastest one; everything else takes the default. Matching model to job is what keeps a big lens
-set affordable — don't pay top-tier rates to run a ripgrep, and don't review architecture on a small
-model.
+**Size the model to the job — and always pass one.** The dispatch tool takes a `model` parameter.
+Pass it on every job: an omitted `model` inherits the orchestrator's own model, which is usually the
+most expensive one available and is wasted on most lenses. The orchestrator's model is for
+orchestrating; reviewers run on the host family's three ordinary tiers. Map the lens's tier like this
+(Claude Code names in brackets; adjust to the host's current family):
+
+| Tier | Model | Right for |
+|---|---|---|
+| `fast` | smallest (Haiku) | deterministic or scripted lenses — a grep sweep, a checklist with yes/no answers |
+| `standard` | mid (Sonnet) | most line-by-line lenses — conventions, tests, comments, removed behaviour |
+| `deep` | largest ordinary tier (Opus) | `broad`-level and understanding-heavy lenses — architecture, security-surface, compliance, any design/plan target |
+
+If the lens sets `model`, honour it. If not, infer: `broad` level or a design/plan/idea target →
+`deep`; a lens whose body is mostly exact commands → `fast`; everything else → `standard`. Never
+dispatch a reviewer on the orchestrator's own model unless the lens pins it by name — matching model to
+job is what keeps a big lens set affordable.
 
 Give it the full contents of [reference/reviewer-brief.md](reference/reviewer-brief.md) plus:
 - the **lens file path**, the **target** (and how to obtain it — the diff range, the file, the plan
@@ -124,7 +136,11 @@ Give it the full contents of [reference/reviewer-brief.md](reference/reviewer-br
 The plan is grown, not fixed. After results, you may append jobs — but bounded:
 - **Deepen** a confirmed-but-shallow finding (does the pattern recur elsewhere? blast radius?).
 - **Verify** a plausible-but-uncertain finding before it enters the report. Spawn an **independent**
-  job — a fresh reviewer, briefed to *try to refute* — and have it return a verdict on this ladder:
+  job — a fresh reviewer, briefed to *try to refute* — and have it return a verdict on this ladder.
+  Verification runs on `deep` (Opus) regardless of the originating lens's tier: it decides what gets
+  dropped from the report, so it must not run smaller than the job that raised the finding, and it
+  doesn't need the orchestrator's model either. Deepen and route jobs keep the tier of the lens they
+  run.
   - **CONFIRMED** — it can name the inputs/state that trigger the problem and the concrete wrong
     outcome, and quote the line. Ship it.
   - **PLAUSIBLE** — the mechanism is real but the trigger is uncertain (timing, env, config). Ship it,
@@ -168,7 +184,8 @@ Structure:
    where it's code.
 3. **Unresolved** ❓ — things a reviewer couldn't determine; ask the user, and if the answer matters,
    re-dispatch that one job with it added to context.
-4. **Jobs run** — the lenses dispatched, for coverage transparency.
+4. **Jobs run** — each lens dispatched, the directory it came from and the model it ran on, for
+   coverage and cost transparency.
 
 **Where the report goes:** by default keep it transient — the session scratchpad — and always return
 the findings in your reply so a calling agent can act on them without opening a file. If the review is

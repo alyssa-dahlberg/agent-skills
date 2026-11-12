@@ -5,7 +5,8 @@ standard, comment quality, architecture, … Lenses are **data, not agents**: ea
 file the reviewer is handed at review time. The reviewer reads the lens, reads any references the lens
 points at, then reviews the target.
 
-Adding a concern is **dropping a file** in `.review-lenses/`. No agent to author, no dispatch table to
+Adding a concern is **dropping a file** in `.review-lenses/` (the repo's, or `~/.review-lenses/` for
+every repo). No agent to author, no dispatch table to
 edit — the orchestrator discovers lenses from that directory and selects the relevant ones by their
 `concern` (with `triggers` as a floor; see below).
 
@@ -32,7 +33,7 @@ level: detail                        # broad | detail — a hint for sequencing,
 Look for: <specific, checkable things>. Cite the reference and section in each finding.
 
 References — the reviewer opens every one before reviewing:
-- `docs/testing.md`                      (local path — read from the working tree)
+- `CONTRIBUTING.md#testing`              (local path — read from the working tree)
 - https://example.com/some-standard      (URL — fetched at review time)
 ```
 
@@ -51,13 +52,14 @@ References — the reviewer opens every one before reviewing:
   Keep triggers honest: they're the floor, not the ceiling.
 - **`level`** — `broad` (architecture, security-surface, plan-level) runs before `detail`
   (line-by-line) so higher-level findings inform the detailed pass. A sequencing hint.
-- **`model`** — *optional*. How much horsepower the reviewer needs, as a tier: **`fast`** (a cheap,
-  quick model — right for deterministic/scripted lenses like a grep sweep), **`standard`** (the
-  default), or **`deep`** (the most capable model — right for architecture, security-surface, or
-  anything that needs real understanding). The orchestrator maps the tier to the host's actual models
-  and passes it when dispatching this lens. Omit it and the orchestrator infers from `level` and the
+- **`model`** — *optional*. How much horsepower the reviewer needs, as a tier: **`fast`** (the
+  smallest model — right for deterministic/scripted lenses like a grep sweep), **`standard`** (the
+  mid tier, the default — most line-by-line lenses), or **`deep`** (the largest ordinary tier — right
+  for architecture, security-surface, compliance, or anything that needs real understanding). The
+  orchestrator maps the tier to the host's current models (in Claude Code: Haiku, Sonnet, Opus) and
+  passes it when dispatching this lens. Omit it and the orchestrator infers from `level` and the
   lens's shape. You may name a concrete model instead of a tier if you want to pin one — at the cost of
-  portability across harnesses and model generations.
+  portability across harnesses and model generations. The examples all set a tier; copy the habit.
 
 ## Writing the body
 

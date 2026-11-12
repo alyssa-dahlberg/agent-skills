@@ -33,15 +33,15 @@ URL — the reviewer opens them at review time, so findings track the source and
 paraphrase baked into a prompt. Conventions live where they belong; the review layer is where "does
 this follow them?" actually gets answered.
 
-## A strong `docs/` folder pays double
+## Written-down conventions pay double
 
-The author keeps a rich, human-readable `docs/` folder in every repo — architecture, conventions, the
-*why* behind decisions — written for people first. Review lenses then **cite those docs instead of
-restating them**, so the same words that onboard a human also drive the review, and neither can drift
-from the other without the other noticing. The two go hand in hand: when you're deciding where a
-convention should live, write it in `docs/` for the humans and point a lens at it. A reference-backed
-lens over a good docs folder is the ideal end state; self-contained lenses are how you start before the
-docs exist.
+Wherever your repo keeps its human-readable docs — architecture, conventions, the *why* behind
+decisions — write them for people first. Review lenses then **cite those docs instead of restating
+them**, so the same words that onboard a human also drive the review, and neither can drift from the
+other without the other noticing. The two go hand in hand: when you're deciding where a convention
+should live, write it down for the humans and point a lens at it. A reference-backed lens over good
+docs is the ideal end state; self-contained lenses are how you start before the docs exist. The skill
+doesn't care where the docs live or how they're laid out; that's the repo's call.
 
 ## Composable, isolated, and cheap to experiment
 
@@ -69,13 +69,15 @@ a capable harness reaches for it on its own; nothing stops you asking explicitly
 ## Setup
 
 1. Install the skill (see the repo root README for `npx skills` usage).
-2. Create a **`.review-lenses/`** directory at your repo root — this is where *your* lenses live. It's
-   deliberately not tied to any one agent's config directory: lenses are project data you author and
-   grow, not agent plumbing. To keep them somewhere else, set the `REVIEW_LENSES_DIR` environment
-   variable; how you set it depends on your harness (e.g. in Claude Code, add it to
-   `.claude/settings.json`):
+2. Create a **`.review-lenses/`** directory — at your repo root for lenses that belong to that project,
+   in your home directory (`~/.review-lenses/`) for lenses you want on every repo you touch, or both.
+   The orchestrator reads both and takes the union; a repo lens with the same `name` as a personal one
+   replaces it. The directory is deliberately not tied to any one agent's config directory: lenses are
+   project data you author and grow, not agent plumbing. To search different places, set the
+   `REVIEW_LENSES_DIR` environment variable to a colon-separated list (earlier entries win); how you set
+   it depends on your harness (e.g. in Claude Code, add it to `.claude/settings.json`):
    ```json
-   { "env": { "REVIEW_LENSES_DIR": "config/review-lenses" } }
+   { "env": { "REVIEW_LENSES_DIR": "config/review-lenses:/home/me/.review-lenses" } }
    ```
 3. Seed it from the [`examples/`](examples/) shipped here — copy the ones that fit, edit them, delete
    the rest. Then add your own.
@@ -138,10 +140,12 @@ Full format spec: [`reference/lens-format.md`](reference/lens-format.md). The re
   there's no canonical source to point at.
 - **Phrase the body as things to *find*.** "Flag X", "look for Y" — a checklist the reviewer applies,
   not an essay.
-- **Hint a model tier if it matters.** A deterministic grep lens runs fine on a fast, cheap model; an
-  architecture lens wants the deepest one. Set `model: fast | standard | deep` and the orchestrator
-  sizes the reviewer to the job (omit it and it infers from `level` and shape). Cheap lenses staying
-  cheap is part of what makes a big lens set affordable to run.
+- **Set a model tier.** A deterministic grep lens runs fine on the smallest model; an architecture
+  lens wants the largest ordinary tier; most line-by-line lenses sit in the middle. Set `model: fast |
+  standard | deep` and the orchestrator maps it to the host's models (Haiku, Sonnet, Opus in Claude
+  Code) and passes it on dispatch — it never lets a reviewer inherit its own, pricier model. Omit the
+  field and it infers from `level` and shape, but an explicit tier is what keeps a big lens set
+  affordable, so the examples all set one.
 - **Write a sharp `concern` — it's what gets your lens picked.** In auto mode the orchestrator runs a
   lens whenever its `concern` reads relevant to the change, not only when a trigger fired. A vague
   one-liner gets skipped; a precise one gets run when it should. This is the field that carries
@@ -157,10 +161,11 @@ Full format spec: [`reference/lens-format.md`](reference/lens-format.md). The re
 ## How it fits together
 
 ```
-.review-lenses/             ← your lenses (repo root, you own this)
+.review-lenses/             ← this repo's lenses (you own this)
   architecture.md
   testing.md
   ...
+~/.review-lenses/           ← your personal lenses, applied in every repo; a repo lens of the same name wins
 
 skills/review-lenses/       ← this skill (installed; don't edit to extend)
   SKILL.md                    orchestrator: prose → jobs → dispatch → collate
