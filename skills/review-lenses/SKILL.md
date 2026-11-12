@@ -1,6 +1,6 @@
 ---
 name: review-lenses
-description: Review code, a plan, a design, or an idea through one or more lenses. Accepts plain-English requests — "review this branch", "review the architecture of these interfaces", "check the payment flow against PCI concerns", "sanity-check this idea". Resolves the request into review jobs (each one lens × one target), dispatches read-only reviewers, and collates one report. A lens is a small markdown file in .review-lenses/ describing one concern; adding a concern is dropping a file. Use whenever the user or a calling agent asks to review, check, or sanity-check anything — and reach for it proactively — any agent can and should self-serve a review of its own work before handing it over (before finalizing a change, after anything security-sensitive, when unsure). It's cheap, read-only, and you don't need to be asked.
+description: Review code, a plan, a design, or an idea through one or more lenses. Accepts plain-English requests — "review this branch", "review the architecture of these interfaces", "check the payment flow against PCI concerns", "sanity-check this idea". Resolves the request into review jobs (each one lens × one target), dispatches read-only reviewers, and collates one report. A lens is a small markdown file in a .review-lenses/ directory (repo or user-level) describing one concern; adding a concern is dropping a file. Use whenever the user or a calling agent asks to review, check, or sanity-check anything — and reach for it proactively — any agent can and should self-serve a review of its own work before handing it over (before finalizing a change, after anything security-sensitive, when unsure). It's cheap, read-only, and you don't need to be asked.
 allowed-tools:
   - Bash
   - Read
@@ -25,7 +25,7 @@ should invoke it on its *own* work before handing it back: before finalizing a c
 security-sensitive, whenever unsure. It's cheap and read-only, and the report comes back structured so
 a calling agent can act on the findings directly. Reach for it proactively; you don't need to be asked.
 
-Two axes, kept independent: a **lens** = *what to look for* (a file in `.review-lenses/`); a **target**
+Two axes, kept independent: a **lens** = *what to look for* (a file in a `.review-lenses/` directory, repo or user-level); a **target**
 = *what to look at* (a diff, a class, a plan phase, a whole plan, a design doc, an idea). Any lens
 applies to any target. A **job** is one lens on one target. See [reference/lens-format.md](reference/lens-format.md)
 for the lens file format and [reference/reviewer-brief.md](reference/reviewer-brief.md) for the brief you
@@ -40,15 +40,19 @@ proceed (use `AskUserQuestion` for real forks like "phase 3 — the evaluator or
 subagent (an agent self-reviewing its work), infer and proceed, leaning on `UNRESOLVED` findings for
 anything you can't settle.
 
-**Find the lenses.** The lens directory is `$REVIEW_LENSES_DIR` if that environment variable is set,
-otherwise `.review-lenses/` at the repo root:
+**Find the lenses.** Lenses come from a list of directories, searched in order. By default that is
+`.review-lenses/` at the repo root, then `~/.review-lenses/` in the user's home. `REVIEW_LENSES_DIR`,
+if set, is a colon-separated list that replaces the defaults entirely:
 ```bash
-echo "${REVIEW_LENSES_DIR:-.review-lenses}"
+IFS=: read -ra LENS_DIRS <<< "${REVIEW_LENSES_DIR:-.review-lenses:$HOME/.review-lenses}"
+for d in "${LENS_DIRS[@]}"; do [ -d "$d" ] || continue; ls "$d"/*.md; done
 ```
-`REVIEW_LENSES_DIR` lets a project point at a custom location; how you set an env var depends on your
-harness (e.g. in Claude Code, add it to `.claude/settings.json` under `"env"`). Read the frontmatter of
-every `*.md` in that directory **except `README.md`** — take `concern`, `triggers`, `level`. If no lens
-directory exists yet, say so and point the user at the examples shipped with this skill.
+Take the union of every `*.md` in those directories **except `README.md`**, reading each file's
+frontmatter for `name`, `concern`, `triggers`, `level`, `model`. **Earlier directories win:** when two
+files share a `name`, keep the first one found and drop the rest, so a repo lens replaces a personal
+lens of the same name. How you set an env var depends on your harness (e.g. in Claude Code, add it to
+`.claude/settings.json` under `"env"`). If no directory on the list exists, say so and point the user
+at the examples shipped with this skill.
 - *Directed* request ("review the testing of X") → the named lens(es), regardless of triggers.
 - *Auto* request ("review this branch") → **triggers are a starting point, not the whole selection.**
   Do two passes:
@@ -180,7 +184,8 @@ Structure:
    where it's code.
 3. **Unresolved** ❓ — things a reviewer couldn't determine; ask the user, and if the answer matters,
    re-dispatch that one job with it added to context.
-4. **Jobs run** — each lens dispatched and the model it ran on, for coverage and cost transparency.
+4. **Jobs run** — each lens dispatched, the directory it came from and the model it ran on, for
+   coverage and cost transparency.
 
 **Where the report goes:** by default keep it transient — the session scratchpad — and always return
 the findings in your reply so a calling agent can act on them without opening a file. If the review is

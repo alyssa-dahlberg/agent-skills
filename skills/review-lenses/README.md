@@ -69,13 +69,15 @@ a capable harness reaches for it on its own; nothing stops you asking explicitly
 ## Setup
 
 1. Install the skill (see the repo root README for `npx skills` usage).
-2. Create a **`.review-lenses/`** directory at your repo root — this is where *your* lenses live. It's
-   deliberately not tied to any one agent's config directory: lenses are project data you author and
-   grow, not agent plumbing. To keep them somewhere else, set the `REVIEW_LENSES_DIR` environment
-   variable; how you set it depends on your harness (e.g. in Claude Code, add it to
-   `.claude/settings.json`):
+2. Create a **`.review-lenses/`** directory — at your repo root for lenses that belong to that project,
+   in your home directory (`~/.review-lenses/`) for lenses you want on every repo you touch, or both.
+   The orchestrator reads both and takes the union; a repo lens with the same `name` as a personal one
+   replaces it. The directory is deliberately not tied to any one agent's config directory: lenses are
+   project data you author and grow, not agent plumbing. To search different places, set the
+   `REVIEW_LENSES_DIR` environment variable to a colon-separated list (earlier entries win); how you set
+   it depends on your harness (e.g. in Claude Code, add it to `.claude/settings.json`):
    ```json
-   { "env": { "REVIEW_LENSES_DIR": "config/review-lenses" } }
+   { "env": { "REVIEW_LENSES_DIR": "config/review-lenses:/home/me/.review-lenses" } }
    ```
 3. Seed it from the [`examples/`](examples/) shipped here — copy the ones that fit, edit them, delete
    the rest. Then add your own.
@@ -159,10 +161,11 @@ Full format spec: [`reference/lens-format.md`](reference/lens-format.md). The re
 ## How it fits together
 
 ```
-.review-lenses/             ← your lenses (repo root, you own this)
+.review-lenses/             ← this repo's lenses (you own this)
   architecture.md
   testing.md
   ...
+~/.review-lenses/           ← your personal lenses, applied in every repo; a repo lens of the same name wins
 
 skills/review-lenses/       ← this skill (installed; don't edit to extend)
   SKILL.md                    orchestrator: prose → jobs → dispatch → collate

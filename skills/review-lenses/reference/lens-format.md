@@ -5,7 +5,8 @@ standard, comment quality, architecture, … Lenses are **data, not agents**: ea
 file the reviewer is handed at review time. The reviewer reads the lens, reads any references the lens
 points at, then reviews the target.
 
-Adding a concern is **dropping a file** in `.review-lenses/`. No agent to author, no dispatch table to
+Adding a concern is **dropping a file** in `.review-lenses/` (the repo's, or `~/.review-lenses/` for
+every repo). No agent to author, no dispatch table to
 edit — the orchestrator discovers lenses from that directory and selects the relevant ones by their
 `concern` (with `triggers` as a floor; see below).
 
