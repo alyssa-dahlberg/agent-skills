@@ -51,13 +51,14 @@ References — the reviewer opens every one before reviewing:
   Keep triggers honest: they're the floor, not the ceiling.
 - **`level`** — `broad` (architecture, security-surface, plan-level) runs before `detail`
   (line-by-line) so higher-level findings inform the detailed pass. A sequencing hint.
-- **`model`** — *optional*. How much horsepower the reviewer needs, as a tier: **`fast`** (a cheap,
-  quick model — right for deterministic/scripted lenses like a grep sweep), **`standard`** (the
-  default), or **`deep`** (the most capable model — right for architecture, security-surface, or
-  anything that needs real understanding). The orchestrator maps the tier to the host's actual models
-  and passes it when dispatching this lens. Omit it and the orchestrator infers from `level` and the
+- **`model`** — *optional*. How much horsepower the reviewer needs, as a tier: **`fast`** (the
+  smallest model — right for deterministic/scripted lenses like a grep sweep), **`standard`** (the
+  mid tier, the default — most line-by-line lenses), or **`deep`** (the largest ordinary tier — right
+  for architecture, security-surface, compliance, or anything that needs real understanding). The
+  orchestrator maps the tier to the host's current models (in Claude Code: Haiku, Sonnet, Opus) and
+  passes it when dispatching this lens. Omit it and the orchestrator infers from `level` and the
   lens's shape. You may name a concrete model instead of a tier if you want to pin one — at the cost of
-  portability across harnesses and model generations.
+  portability across harnesses and model generations. The examples all set a tier; copy the habit.
 
 ## Writing the body
 

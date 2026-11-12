@@ -5,6 +5,7 @@ triggers:
   - "**/*.cs"
   - "**/*.csproj"
 level: detail
+model: standard   # line-by-line against a style guide — mid tier is plenty
 ---
 
 > **This is an example lens.** The *Context* paragraph below is invented to show the shape of a good

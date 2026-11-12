@@ -138,10 +138,12 @@ Full format spec: [`reference/lens-format.md`](reference/lens-format.md). The re
   there's no canonical source to point at.
 - **Phrase the body as things to *find*.** "Flag X", "look for Y" — a checklist the reviewer applies,
   not an essay.
-- **Hint a model tier if it matters.** A deterministic grep lens runs fine on a fast, cheap model; an
-  architecture lens wants the deepest one. Set `model: fast | standard | deep` and the orchestrator
-  sizes the reviewer to the job (omit it and it infers from `level` and shape). Cheap lenses staying
-  cheap is part of what makes a big lens set affordable to run.
+- **Set a model tier.** A deterministic grep lens runs fine on the smallest model; an architecture
+  lens wants the largest ordinary tier; most line-by-line lenses sit in the middle. Set `model: fast |
+  standard | deep` and the orchestrator maps it to the host's models (Haiku, Sonnet, Opus in Claude
+  Code) and passes it on dispatch — it never lets a reviewer inherit its own, pricier model. Omit the
+  field and it infers from `level` and shape, but an explicit tier is what keeps a big lens set
+  affordable, so the examples all set one.
 - **Write a sharp `concern` — it's what gets your lens picked.** In auto mode the orchestrator runs a
   lens whenever its `concern` reads relevant to the change, not only when a trigger fired. A vague
   one-liner gets skipped; a precise one gets run when it should. This is the field that carries

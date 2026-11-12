@@ -106,14 +106,22 @@ agent the repo ships works too; otherwise use a general-purpose agent instructed
 **Don't dispatch a reviewer to a lens with URL references on an agent type that lacks web tools** — it
 would silently fall back to reviewing from memory, the exact drift this design avoids.
 
-**Size the model to the job.** The dispatch tool takes a `model` parameter — use it. If the lens sets a
-`model` hint, honour it, mapping the tier to the host's models: `fast` → the cheapest/quickest, `deep` →
-the most capable, `standard` → the default. If the lens gives no hint, infer: a `broad`-level or
-understanding-heavy lens (architecture, security-surface, a design/plan target) wants the strongest
-model; a deterministic or scripted lens (a grep sweep like `banned-patterns`) runs fine on the
-cheapest, fastest one; everything else takes the default. Matching model to job is what keeps a big lens
-set affordable — don't pay top-tier rates to run a ripgrep, and don't review architecture on a small
-model.
+**Size the model to the job — and always pass one.** The dispatch tool takes a `model` parameter.
+Pass it on every job: an omitted `model` inherits the orchestrator's own model, which is usually the
+most expensive one available and is wasted on most lenses. The orchestrator's model is for
+orchestrating; reviewers run on the host family's three ordinary tiers. Map the lens's tier like this
+(Claude Code names in brackets; adjust to the host's current family):
+
+| Tier | Model | Right for |
+|---|---|---|
+| `fast` | smallest (Haiku) | deterministic or scripted lenses — a grep sweep, a checklist with yes/no answers |
+| `standard` | mid (Sonnet) | most line-by-line lenses — conventions, tests, comments, removed behaviour |
+| `deep` | largest ordinary tier (Opus) | `broad`-level and understanding-heavy lenses — architecture, security-surface, compliance, any design/plan target |
+
+If the lens sets `model`, honour it. If not, infer: `broad` level or a design/plan/idea target →
+`deep`; a lens whose body is mostly exact commands → `fast`; everything else → `standard`. Never
+dispatch a reviewer on the orchestrator's own model unless the lens pins it by name — matching model to
+job is what keeps a big lens set affordable.
 
 Give it the full contents of [reference/reviewer-brief.md](reference/reviewer-brief.md) plus:
 - the **lens file path**, the **target** (and how to obtain it — the diff range, the file, the plan
@@ -124,7 +132,11 @@ Give it the full contents of [reference/reviewer-brief.md](reference/reviewer-br
 The plan is grown, not fixed. After results, you may append jobs — but bounded:
 - **Deepen** a confirmed-but-shallow finding (does the pattern recur elsewhere? blast radius?).
 - **Verify** a plausible-but-uncertain finding before it enters the report. Spawn an **independent**
-  job — a fresh reviewer, briefed to *try to refute* — and have it return a verdict on this ladder:
+  job — a fresh reviewer, briefed to *try to refute* — and have it return a verdict on this ladder.
+  Verification runs on `deep` (Opus) regardless of the originating lens's tier: it decides what gets
+  dropped from the report, so it must not run smaller than the job that raised the finding, and it
+  doesn't need the orchestrator's model either. Deepen and route jobs keep the tier of the lens they
+  run.
   - **CONFIRMED** — it can name the inputs/state that trigger the problem and the concrete wrong
     outcome, and quote the line. Ship it.
   - **PLAUSIBLE** — the mechanism is real but the trigger is uncertain (timing, env, config). Ship it,
@@ -168,7 +180,7 @@ Structure:
    where it's code.
 3. **Unresolved** ❓ — things a reviewer couldn't determine; ask the user, and if the answer matters,
    re-dispatch that one job with it added to context.
-4. **Jobs run** — the lenses dispatched, for coverage transparency.
+4. **Jobs run** — each lens dispatched and the model it ran on, for coverage and cost transparency.
 
 **Where the report goes:** by default keep it transient — the session scratchpad — and always return
 the findings in your reply so a calling agent can act on them without opening a file. If the review is

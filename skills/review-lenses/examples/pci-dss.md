@@ -7,6 +7,7 @@ triggers:
   - "**/*card*/**"
   - "**/*billing*/**"
 level: broad
+model: deep   # reads an external standard and judges a whole surface — needs real understanding
 ---
 
 > **This is an example lens** showing a **compliance** concern reviewed against an *external standard*:

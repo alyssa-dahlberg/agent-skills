@@ -4,6 +4,7 @@ concern: Prose docs and code comments carry only non-obvious information, sit at
 triggers:
   - "**/*"
 level: detail
+model: standard   # judging altitude and restating-the-code needs some reading, not deep reasoning
 ---
 
 > **This is an example lens**, self-contained and intentionally **broad-triggered** (it applies to
