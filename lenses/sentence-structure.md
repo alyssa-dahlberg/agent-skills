@@ -1,6 +1,6 @@
 ---
 name: sentence-structure
-concern: English sentences, wherever they appear (docs, comments, commit messages, PR and issue text, pasted Notion or Jira content), are built so a reader parses them once, without holding nouns in mind while waiting for a verb.
+concern: English sentences, wherever they appear (docs, comments, commit messages, PR and issue text, pasted Notion or Jira content), are built so a reader parses them once, each carrying one fact, without holding nouns in mind while waiting for a verb.
 triggers:
   - "**/*"
 level: detail
@@ -8,8 +8,9 @@ model: standard   # judging which sentences are hard and writing the replacement
 ---
 
 **Context.** Alyssa reads fast and will not re-read. Most of the prose under review was written by
-a large language model, and those models favour indirect sentence structures that are grammatical
-but slow to parse. This lens finds those structures and supplies the direct version.
+a large language model, and those models pack several facts into one grammatical but slow sentence.
+This lens finds those sentences and supplies short ones: one fact each, ended with a full stop,
+close to bullet-point style.
 
 **Scope.**
 
@@ -38,21 +39,55 @@ Leave it alone when:
 
 - The inner subject is a pronoun or a short name: "the file you opened", "the branch Alyssa pushed".
 - The clause is two or three words and ends the sentence: "the model the lens sets".
-- The direct version would be longer and no clearer.
 
-Rewrite with the first of these that reads naturally:
+## Pattern 2: `whose` clauses
 
-1. Make the doer the subject of a main clause. "The reviewer that the orchestrator dispatches reads
-   the lens." becomes "The orchestrator dispatches a reviewer, which reads the lens."
-2. Split into two sentences, one fact each. "The token that the gateway that the client calls
-   validates expires hourly." becomes "The client calls the gateway. The gateway validates the
-   token, which expires hourly."
-3. Keep the receiver as the topic with a short passive. "The lens that the orchestrator selected
-   ran on Haiku." becomes "The lens selected by the orchestrator ran on Haiku."
+"The tickets whose parent epic names that team" makes the reader build a second noun and its
+relation to the first before learning what either does.
+
+Flag a `whose` clause when the noun after `whose` is a full noun phrase with its own verb and
+object. Flag it harder when that noun phrase shares words with the head noun ("the orders whose
+draft order ...").
+
+Leave alone a `whose` clause with a plain predicate: "a lens whose name is taken".
+
+## Pattern 3: stacked clauses
+
+A sentence is stacked when it does any of these:
+
+- Contains two or more relative clauses (`that`, `which`, `who`, `whose`, `where`).
+- States its main fact, then attaches a second fact in a trailing phrase that has a clause of its
+  own: ", in the batch that closes the sprint and records its velocity".
+- Uses three or more noun phrases that share a head word (task, draft task, task record), so the
+  reader has to tell them apart.
+- Points back with "that X" or "its" when two or more earlier nouns could be the target.
+
+Example: "The nightly job sets the owner on the tickets whose parent epic names that team, in the
+batch that closes the sprint and records its velocity."
+
+## Rewriting
+
+Default: split into short sentences. Join clauses only when the split would be longer and no
+clearer.
+
+- One fact per sentence. Subject, verb, object, full stop.
+- Put the facts in the order they happen.
+- Introduce each thing once with its full name. After that, refer to it by the shortest
+  unambiguous name.
+- A fact about when or where something happens gets its own sentence.
+- For a single short object-relative, a passive is enough: "The lens that the orchestrator
+  selected ran on Haiku." becomes "The lens selected by the orchestrator ran on Haiku."
+
+The stacked example becomes: "The nightly job runs one batch. The batch closes the sprint and
+records its velocity. Some tickets have a parent epic that names the team. The batch sets the owner
+on those tickets."
 
 ## Findings
 
-- One finding per sentence. `what` quotes the sentence. `fix` gives the full rewritten sentence.
-- Severity: `ATTENTION` for nested clauses. `SUGGESTION` for everything else. Never `BLOCKING`.
-- If no rewrite keeps the meaning exactly, do not report the sentence.
+- One finding per sentence, naming the pattern. `what` quotes the sentence. `fix` gives the full
+  replacement text.
+- Severity: `ATTENTION` for nested object-relatives and stacked sentences. `SUGGESTION` for
+  everything else. Never `BLOCKING`.
+- If the sentence is ambiguous and the rewrite would have to pick a meaning, report it as
+  `UNRESOLVED` and state the two readings.
 - Clean prose is the normal result. Say "No findings" and stop.
