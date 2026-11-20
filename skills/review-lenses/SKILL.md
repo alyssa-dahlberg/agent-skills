@@ -64,6 +64,10 @@ at the examples shipped with this skill.
      when its concern fits. Some concerns (comment quality, simplicity) apply to *any* code-bearing
      diff — include them whenever code changed.
 
+  **Overlap is not a reason to drop a lens.** Run every lens whose `concern` fits, even when two or
+  more cover the same ground; don't pick one over another. Reviewers run isolated and in parallel, and
+  [Step 4](#step-4--collate-one-report) dedups their findings.
+
   You may also **skip** a triggered lens that plainly has nothing to review here. Triggers are cheap
   path-matching; your judgement on `concern` is the real selection. **Say which lenses you added or
   dropped by judgement** so coverage stays transparent.
@@ -95,6 +99,7 @@ narrow directed ask, or `full` (phased by level) for a branch review.
 **Proportionality — do less by default.** A small focused ask is a single job; don't inflate it. Only
 compose extra levels/jobs when signals justify it (a whole feature is in play, or depth was asked
 for). Running a multi-lens whole-plan review on a two-line diff is exactly the ceremony to avoid.
+This limits extra levels and jobs per lens; it never drops a selected lens because another overlaps it.
 
 ## Step 2 — Dispatch
 
