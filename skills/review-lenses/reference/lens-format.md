@@ -42,7 +42,9 @@ References — the reviewer opens every one before reviewing:
 - **`name`** — kebab-case, matching the file name. A stable label for the lens in reports and directed
   requests ("review the `testing` lens on X"). Selection runs off `concern`/`triggers`, not `name`, so
   its only job is to be a readable identifier — keep it in sync with the filename.
-- **`concern`** — one line; also what the orchestrator shows when it lists which lenses it ran.
+- **`concern`** — one line; also what the orchestrator shows when it lists which lenses it ran. It may
+  name scope only ("All English sentences"). It needn't set the lens apart from others: overlapping
+  lenses all run.
 - **`triggers`** — *optional*. A **starting point** for auto-selection, not a gate. In *auto* mode
   ("review this branch") a lens whose globs match a changed path is definitely run — but the
   orchestrator *also* runs any lens whose `concern` reads relevant to the change even if no glob fired,
