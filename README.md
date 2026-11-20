@@ -63,14 +63,15 @@ copy.
   and dispatches read-only reviewers; a **lens** is a small markdown file describing one concern,
   so adding a concern is dropping a file. A neutral engine you layer your own opinionated review
   on top of — see the [skill README](skills/review-lenses/README.md) for the model, the example
-  lenses, and how to write good ones.
+  lenses, and how to write good ones. Alyssa's own working lenses are in [`lenses/`](lenses/README.md).
 
 ## Layout
 
 Each skill is a directory under `skills/`, containing a `SKILL.md` with YAML frontmatter
 (`name`, `description`). Larger skills add `reference/` for material loaded on demand,
 `examples/` for worked cases, and a `README.md` where there's a human-facing guide distinct from
-the agent instructions.
+the agent instructions. `lenses/` at the root holds Alyssa's working review lenses; it is not a
+skill and is not installed with one.
 
 ## License
 
