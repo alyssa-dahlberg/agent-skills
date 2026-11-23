@@ -90,6 +90,35 @@ batch that closes the sprint and records its velocity."
 There are too many ideas in one place in the example sentence.
 
 
+## Pattern 4: label, then colon
+
+A sentence names a vague abstract label, then explains it after a colon. The reader meets the label
+first and has to wait for the colon to learn what it means.
+
+Example: "The cache handles freshness: when entries expire, how they are refreshed and what happens
+on a miss."
+
+Rewrite to say the concrete thing directly: "The cache decides when entries expire, how they are
+refreshed and what happens on a miss."
+
+Leave alone a colon that introduces a real list, an example or a definition the reader needs.
+
+
+## Pattern 5: defining by contrast
+
+A sentence states something by what it is not: "X, not Y", "X rather than Y", "X instead of Y".
+The reader has to hold the rejected idea as well as the real one. Often the negative half adds
+nothing.
+
+Examples: "This is a migration guide, not a reference." "The job retries the batch rather than
+failing it."
+
+Rewrite with the positive statement alone: "The job retries the batch." If the contrast matters,
+give it its own sentence: "This is a migration guide. For the full API, see the reference."
+
+Leave alone a contrast that corrects a likely misreading the reader would otherwise make.
+
+
 ## Rewriting
 
 Default: Split text into shorter, clearer sentences. Join clauses only when the split would be
