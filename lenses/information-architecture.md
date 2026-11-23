@@ -46,6 +46,8 @@ Note them under `HANDOFFS:` if they matter.
 Each finding should make the collection easier to navigate, or less likely to drift out of date.
 
 
+# Look for
+
 ## Abstraction altitude
 
 A reader should be able to pick a level of abstraction and stay there. Code, comments, docs and
@@ -113,8 +115,6 @@ scratch notes. Weight findings on enduring artifacts most heavily.
 
 # Findings
 
-Report a list of suggestions, most severe first.
-
 - `what` names the artifacts involved and the problem with how they relate.
 - `fix` says what goes where, what is deleted and what links to what.
 - Use `ATTENTION` for structural problems that will cause drift or confuse readers. Use
@@ -122,7 +122,6 @@ Report a list of suggestions, most severe first.
   enduring doc that contradicts the code.
 - If the collection's own conventions are unclear and the right home depends on them, report
   `UNRESOLVED` and say what you would need to know.
-- If the structure is sound, say so and stop.
 
 Include short commentary on the collection as a whole when useful. Does the collection read as one
 coherent body of knowledge? Where would a new reader get lost?
