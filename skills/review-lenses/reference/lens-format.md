@@ -91,14 +91,17 @@ field, because the reviewer reads the whole lens and opens whatever it points at
 - **If a lens has no references, the body is self-contained** — it carries the full checklist inline.
   Fine for a widely-agreed best practice with no single doc to cite.
 
-## Two shapes, one format
+## Three shapes, one format
 
-There's no "starter vs. real" split — just whether a lens points at references:
+The shapes differ in where the reviewer finds the source of truth:
 
 - **Reference-backed** — cites local docs and/or URLs; body stays thin and says what to check. Best
   once your conventions are written down somewhere, or when checking against an external standard.
 - **Self-contained** — no references; body carries the full checklist. Best for a universal
   best-practice concern (comment quality, simplicity) with no canonical doc to cite.
+- **Live-docs** — no fixed references. The body tells the reviewer to work out the target's stack and
+  check findings against that stack's current official docs at review time. Best for a concern that
+  applies to any stack (idiomatic code), where the right doc depends on the target.
 
 A lens can start self-contained and later grow a references section pointing at your own docs as your
 conventions solidify — the reviewer handles both the same way.

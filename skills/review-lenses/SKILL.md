@@ -108,12 +108,13 @@ approach is wrong, line-by-line nits on that code are moot). Within a level, dis
 (reviewers are read-only, no conflicts).
 
 For each job, spawn a **read-only** subagent that can **read files and fetch URLs** — it needs
-`Read`/`Glob`/`Grep`, read-only `Bash`, *and* `WebFetch`/`WebSearch`, because a reference-backed lens
-may cite online references (a standard, an RFC, a compliance doc) the reviewer must open at review
-time. In Claude Code the `Explore` agent type fits (read-only, with web access); a dedicated reviewer
+`Read`/`Glob`/`Grep`, read-only `Bash`, *and* `WebFetch`/`WebSearch`. A lens may cite online
+references (a standard, an RFC, a compliance doc) or tell the reviewer to consult the current official
+docs for the target's stack. The reviewer opens these at review time. In Claude Code the `Explore` agent type fits (read-only, with web access); a dedicated reviewer
 agent the repo ships works too; otherwise use a general-purpose agent instructed to stay read-only.
-**Don't dispatch a reviewer to a lens with URL references on an agent type that lacks web tools** — it
-would silently fall back to reviewing from memory, the exact drift this design avoids.
+**A lens that cites URLs or tells the reviewer to consult live documentation needs an agent type with
+web tools.** Without them the reviewer silently falls back to reviewing from memory, the exact drift
+this design avoids.
 
 **Size the model to the job — and always pass one.** The dispatch tool takes a `model` parameter.
 Pass it on every job: an omitted `model` inherits the orchestrator's own model, which is usually the

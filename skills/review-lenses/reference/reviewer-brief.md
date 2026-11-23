@@ -25,8 +25,10 @@ The orchestrator gives you:
    **Open every one before you review**: `Read` a local path, `WebFetch` a URL. Do not review from
    memory of "how this is usually done" or a half-remembered standard — check against what the
    references actually say *today*. This is the whole point: findings track the references, not your
-   recollection. A lens that cites no references is self-contained — its body is the full spec; apply
-   it directly.
+   recollection. A lens that cites no references may still tell you what to look up at review time,
+   such as the current official docs for the target's stack. Do that lookup with `WebFetch` or
+   `WebSearch` before you review, and check findings against what you find. A lens with no references
+   and no lookup instruction is self-contained. Its body is the full spec. Apply it directly.
 
 2. **Understand the target properly.** For a diff, read the surrounding files, not just the hunk —
    context decides whether a change is right. For a symbol, find its definition and call sites. For a
