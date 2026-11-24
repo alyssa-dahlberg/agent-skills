@@ -77,7 +77,8 @@ and frame their checklist as a floor:
   say so explicitly — the reviewer should also flag anything else that violates the concern, and skip a
   listed item that doesn't apply. A closed checklist reads as "only these"; you want "these, and use
   judgement on the rest." Same floor-not-ceiling logic as `triggers`: the list guarantees the important
-  cases aren't missed, it doesn't fence off the concern.
+  cases aren't missed, it doesn't fence off the concern. If a lens needs a closed checklist, it says so
+  and the reviewer stays within it.
 
 ## References live in the body, not the frontmatter
 
@@ -99,6 +100,11 @@ There's no "starter vs. real" split — just whether a lens points at references
   once your conventions are written down somewhere, or when checking against an external standard.
 - **Self-contained** — no references; body carries the full checklist. Best for a universal
   best-practice concern (comment quality, simplicity) with no canonical doc to cite.
+
+The reviewer uses judgement and researches by default. Either shape can also say what to look up at
+review time. For example, a lens for idiomatic code can tell the reviewer to check the current
+official docs for the target's stack. A lens that must be strict says so. It can give commands to run
+as given, a closed checklist, or limit the reviewer to its references.
 
 A lens can start self-contained and later grow a references section pointing at your own docs as your
 conventions solidify — the reviewer handles both the same way.

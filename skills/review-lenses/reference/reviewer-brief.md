@@ -18,15 +18,24 @@ The orchestrator gives you:
 - **Level** — the altitude (plan/arc vs. diff/symbol). Higher-level findings from earlier jobs may be
   included; read them and don't re-raise them.
 
+## Judgement and research
+
+Use your judgement and your own knowledge. Research whenever it would make a finding more accurate:
+search the web, fetch docs, or read more of the repo. You don't need the lens to ask for it. Memory
+of a standard or an API can be out of date, so check it when a finding depends on it.
+
+A lens can narrow this. It may give commands to run as given, a closed checklist, or limit you to its
+own references. When a lens is strict, follow it.
+
+You stay read-only throughout, and every finding cites what it rests on.
+
 ## How to review
 
 1. **Read the whole lens, and read every reference it points at — every run.** The lens body tells you
    what to look for and may cite references (docs or URLs) as its source of truth for the convention.
-   **Open every one before you review**: `Read` a local path, `WebFetch` a URL. Do not review from
-   memory of "how this is usually done" or a half-remembered standard — check against what the
-   references actually say *today*. This is the whole point: findings track the references, not your
-   recollection. A lens that cites no references is self-contained — its body is the full spec; apply
-   it directly.
+   **Open every one before you review**: `Read` a local path, `WebFetch` a URL. Check against what the
+   references say *today*. A lens may also name something to look up at review time, such as the
+   current official docs for the target's stack. Do that lookup before you review.
 
 2. **Understand the target properly.** For a diff, read the surrounding files, not just the hunk —
    context decides whether a change is right. For a symbol, find its definition and call sites. For a
@@ -50,7 +59,8 @@ The orchestrator gives you:
    unhandled cases, "does this approach hold up" — there's no line number, so justify with reasoning.
    **The lens's "Look for" list is a floor, not a gate.** It names what the author cared about most; it
    does not fence off the concern. Also flag anything else that works against the lens's concern even if
-   it isn't listed, and don't force a listed item that plainly doesn't apply. If the lens carries
+   it isn't listed, and don't force a listed item that plainly doesn't apply. If the lens says its list
+   is closed, stay within it. If the lens carries
    *context* — the team, the stack, what they value — review through that frame: it tells you which
    findings land hard and which are noise here.
 
@@ -61,8 +71,8 @@ Return a findings list, most severe first. One finding per issue:
 ```
 [SEVERITY] (lens · level) file:line — one-line summary
   what: what's wrong / the risk
-  why:  the rule it breaks — cite the reference and the specific section (for code) OR the reasoning
-        (for non-code targets)
+  why:  the rule it breaks — cite the reference and section, or the source you looked up (for code)
+        OR the reasoning (for non-code targets)
   fix:  concrete suggested change (omit if not obvious)
 ```
 
