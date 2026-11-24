@@ -14,6 +14,12 @@ A type system is a design tool. Strong types let the compiler or type checker en
 would otherwise need validation code, comments and tests. Code that receives a value of a strong
 type has nothing left to check.
 
+A strong type holds its rules in one place. Test that place well, and every use of the type can trust
+it. Examples:
+
+- A string parsed into a JSON document type. Code that receives the document knows it is well formed.
+- A type for an HTML-encoded string. Code that renders it knows it is safe to output.
+
 Default to this shape:
 
 - Parse untrusted data into strong types at the edges of the system.
