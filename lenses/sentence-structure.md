@@ -49,6 +49,8 @@ an exhaustive list. Look for them, but also note other stylistic issues you see.
 writing factual information for a technical audience, not poetry.
 
 
+# Look for
+
 ## Pattern 1: object-relative clauses
 
 Object relative sentences are indirect and require the reader to hold a concept in their head while
@@ -119,7 +121,7 @@ give it its own sentence: "This is a migration guide. For the full API, see the 
 Leave alone a contrast that corrects a likely misreading the reader would otherwise make.
 
 
-## Rewriting
+# Rewriting
 
 Default: Split text into shorter, clearer sentences. Join clauses only when the split would be
 longer and no clearer. Prefer:
@@ -144,21 +146,18 @@ Encourage the use of other tools when appropriate:
 - ...
 
 
-## Findings
-
-Your findings report should be a list of suggestions.
+# Findings
 
 - `what` quotes the problematic text. `fix` gives a suggested replacement text.
 - Use `ATTENTION` for difficult text and `SUGGESTION` for lighter style suggestions. Use your
   judgement and call `BLOCKING` if a piece of text is particularly egregious.
 - If the sentence is ambiguous and the rewrite would have to pick a meaning, report it as
   `UNRESOLVED` and state the two readings.
-- If the text is good and you have no findings, say so and stop.
 
 Include commentary if appropriate. Can you tell if the text was written by a human or an LLM? Is
 it over long and verbose? Does it feel useful?
 
 
-## Closing
+# Closing
 
 Finally, you are always encouraged to use your judgement, not treat these instructions as hard rules.
