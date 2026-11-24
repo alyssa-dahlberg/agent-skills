@@ -56,6 +56,11 @@ Each finding should make the collection easier to navigate, or less likely to dr
 A reader should be able to pick a level of abstraction and stay there. Code, comments, docs and
 diagrams that describe one thing should sit at the same level.
 
+Functions, classes, modules, files, headings and sections all wrap something and give it a name.
+Use them to put each thing at the level the reader needs. Managing complexity this way keeps a
+project healthy. Over time a project should build up reusable, composable pieces suited to its own
+needs. Flag detail that should be wrapped and named, and pieces that are close to reusable.
+
 - An overview names the moving parts, their interfaces and how they connect. It links down to the
   detail.
 - An interface or contract states what it guarantees and how to use it. It does not describe a
