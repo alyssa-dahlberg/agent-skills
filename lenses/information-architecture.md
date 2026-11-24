@@ -18,6 +18,9 @@ code. Keep pieces small and cohesive. Give each piece a clear owner. State each 
 the pieces together. A reader should find what they need at the level they need. They should be able
 to trust that it is current.
 
+Less is better. Each piece should say something the reader needs. Recommend deleting anything that
+adds no value.
+
 This lens calls for judgement. The sections below are the author's opinions, drawn from software
 design: SOLID, composition over inheritance, DRY, information hiding, encapsulation, domain language.
 Apply these ideas to information as well as code. Use your own knowledge of them and of good
@@ -62,6 +65,9 @@ diagrams that describe one thing should sit at the same level.
 - Mark each move between levels with a link or a labelled section. Do not drop from architecture into
   low-level detail in the middle of a paragraph.
 - A reader at any level should be able to find the next level up and down.
+- A general principle can end up in one component's docs. Readers working elsewhere will not find
+  it there. Move it up to a level where other work can find it, and link back. Do this only when
+  the principle really applies beyond the component.
 
 Dropping a level is sometimes right, for example on a hot path or around a known leaky abstraction.
 When that happens, keep the low-level detail in one marked place.
@@ -73,6 +79,8 @@ Each piece of information belongs to one owner. Ask whose concern it is, then pu
 
 - A module stands on its own. It describes itself and links to what it depends on. It does not name,
   describe or link to the things that use it.
+- Watch for text about a consumer's behaviour, even when no consumer is named. "In production this
+  is overridden" and "the host sets this" in a module's docs describe someone else's concern.
 - Consumers link to the module. They state how they use it and which options they choose.
 - Test: imagine the module moved into a different system. Is the text still true? If not, the text
   is in the wrong place.
@@ -97,6 +105,22 @@ When the source is code or config, the doc should link to it. Leave duplication 
 
 - It is not yet clear what the copies have in common.
 - The reader cannot reach the source.
+
+Write for humans first. Agent files such as `CLAUDE.md`, skills and agent definitions are derived
+from the human docs and the code. They import, link or distill that knowledge for an agent. Flag
+knowledge that lives only in an agent file.
+
+
+## Discoverability
+
+Assume every page is someone's first page. Readers arrive from a search, a link in code or an agent
+loading a file. Few start at the top and work down.
+
+- A page says early what it covers and what it leaves to other pages.
+- A link to the reader's next question sits where that question arises. A list of related links at
+  the end is less useful.
+- Folders help a reader browse. A page linked from where readers need it gets found, whatever
+  folder it is in.
 
 
 ## Enduring and temporary artifacts
